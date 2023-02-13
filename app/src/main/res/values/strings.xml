@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">AplikasiKlinik</string>
+
+<!--Onboarding-->
+    <string name="title_ob_a">Tentang Aplikasi</string>
+    <string name="title_ob_b">Klinik Triyola</string>
+    <string name="title_ob_c">Pelayanan</string>
+
+    <string name="desc_ob_a">Selamat datang di Aplikasi pelayanan, aplikasi yang membantu kamu untuk mendapatkan pelayanan</string>
+    <string name="desc_ob_b">Klinik Triyola adalah klinik kesehatan yang terletak di Nusukan, Surakarta</string>
+    <string name="desc_ob_c">Klinik Triyola menyediaka pelayanan praktik umum dan praktik gigi</string>
+
+<!--    Register-->
+    <string name="register_title">Daftar Akun</string>
+    <string name="register_desc">Yuk daftarkan akunmu untuk mendapatkan pelayanan digital terbaik dari Klinik Triyola</string>
+    <string name="nik">NIK</string>
+    <string name="nama">Nama</string>
+    <string name="tanggal_lahir">Tanggal Lahir</string>
+    <string name="alamat">Alamat</string>
+    <string name="phone">Phone</string>
+    <string name="sudah_punya_akun">Sudah Punya Akun ?</string>
+    
+<!--    Login-->
+    <string name="login_title">Masuk</string>
+    <string name="login_desc">Masukkan nomor telepon untuk mengakses layanan digital Klinik Triyola</string>
+    <string name="belum_punya_akun">Belum Punya Akun ?</string>
+
+    <!--    Verifikasi-->
+    <string name="verifikasi_title">Verifikasi</string>
+    <string name="verifikasi_desc">Kami mengirimkan code melalui WhatsApp</string>
+    <string name="kirim_lagi">Kode tidak terkirim ?</string>
+    
+    <string name="masuk">Masuk</string>
+    <string name="daftar">Daftar</string>
+
+<!--    Menu Antrian-->
+    <string name="antrian">Antrian</string>
+    <string name="jam">Jam Masuk</string>
+    <string name="profile">Profile</string>
+    <string name="selamat_datang">Selamat Datang,</string>
+    <string name="jumlah_antrian">Jumlah Antrian</string>
+    <string name="praktik_sekarang">Praktik Sekarang</string>
+    <string name="praktik_umum">Praktik Umum</string>
+    <string name="antrian_title">Yuk akses fitur antrian untuk mempermudah pelayanan kamu</string>
+    <string name="title_queue_regist">Pendaftaran Antrian</string>
+    <string name="desc_queue_regist">lakukan pendaftaran antrian layanan kesehatan secara online</string>
+    <string name="title_current_queue">Antrian Sekarang</string>
+    <string name="desc_current_queue">Apakah kamu sudah mengantri atau apakah masih dalam antrian ?</string>
+    <string name="title_queue_history">Riwayat Antrian</string>
+    <string name="desc_queue_history">Mau tau riwayat waktu berobat kamu ? cek disini</string>
+    <string name="anounce_title">Pengumuman</string>
+
+
+</resources>

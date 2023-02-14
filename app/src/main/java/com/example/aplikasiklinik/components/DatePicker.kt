@@ -27,7 +27,10 @@ import java.util.*
 @Composable
 fun DatePicker(
     context:Context,
-    date:MutableState<String>
+    date:MutableState<String>,
+    color: Color = Color.White,
+    colorSecond: Color = Color.White,
+    boolean: Boolean = true
 ) {
     val year:Int
     val month:Int
@@ -52,9 +55,9 @@ fun DatePicker(
         color = Color.Transparent,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { datePickerDialog.show() },
+            .clickable { if (boolean) datePickerDialog.show() },
         shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(1.dp, Color.White)
+        border = BorderStroke(1.dp,color)
     ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -64,7 +67,7 @@ fun DatePicker(
             ) {
                     Icon(painter = painterResource(id = R.drawable.date_icon_svg),
                         contentDescription = null,
-                        tint = Color.White.copy(0.6F),
+                        tint = color,
                         modifier = Modifier
                             .size(30.dp))
 
@@ -74,7 +77,7 @@ fun DatePicker(
                     text = date.value.ifEmpty { stringResource(id = R.string.tanggal_lahir) },
                     style = MaterialTheme.typography.h1,
                     fontSize = 12.sp,
-                    color = Color.White
+                    color = colorSecond
                 )
             }
     }

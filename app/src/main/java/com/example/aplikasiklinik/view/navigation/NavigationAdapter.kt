@@ -19,6 +19,7 @@ import com.example.aplikasiklinik.view.onboarding.OnBoardingScreen
 import com.example.aplikasiklinik.view.otp.OTPViewModel
 import com.example.aplikasiklinik.view.otp.OtpScreen
 import com.example.aplikasiklinik.view.profil.ProfilScreen
+import com.example.aplikasiklinik.view.profil.ProfilViewModel
 import com.example.aplikasiklinik.view.register.RegisterScreen
 import com.example.aplikasiklinik.view.splashscreen.SplashScreen
 import com.example.aplikasiklinik.widget.register.RegisterViewModel
@@ -35,28 +36,20 @@ fun NavigationAdapter(
     click:() -> Unit
 ) {
 
-
     val regViewModel = hiltViewModel<RegisterViewModel>()
     val loginViewModel = hiltViewModel<LoginViewModel>()
     val optViewModel = hiltViewModel<OTPViewModel>()
+    val profileViewModel = hiltViewModel<ProfilViewModel>()
 
     val login = remember {
         mutableStateOf(false)
     }
 
     val entering = remember {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
 
     val enterings = remember {
-        mutableStateOf(false)
-    }
-
-    val enteringb = remember {
-        mutableStateOf(false)
-    }
-
-    val enteringc = remember {
         mutableStateOf(false)
     }
 
@@ -64,12 +57,9 @@ fun NavigationAdapter(
 
         composable(Routes.HomeAntrian.route,
             enterTransition = {
-                enteringc.value = true
                 slideIntoContainer(towards = if (enterings.value) AnimatedContentScope.SlideDirection.Right  else AnimatedContentScope.SlideDirection.Left ,tween(300))
             },
             exitTransition = {
-                entering.value = false
-                enteringb.value = false
                 slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else if (entering.value) AnimatedContentScope.SlideDirection.Right else AnimatedContentScope.SlideDirection.Left,tween(300))
             }) {
             AntrianScreen(
@@ -82,38 +72,24 @@ fun NavigationAdapter(
 
         composable(Routes.ScheduleAntrian.route,
             enterTransition = {
-                enteringb.value = true
-                slideIntoContainer(towards =  if (entering.value) AnimatedContentScope.SlideDirection.Right else AnimatedContentScope.SlideDirection.Left ,tween(300))
+                slideIntoContainer(towards =  AnimatedContentScope.SlideDirection.Right,tween(300))
             },
             exitTransition = {
 
                 enterings.value = true
-                slideOutOfContainer(towards = if (entering.value){
-                    enteringb.value = false
-                    AnimatedContentScope.SlideDirection.Right
-                }
-                else if  (!enteringb.value)  {
-                    entering.value = false
-                    enteringb.value = true
-                    enteringc.value = false
-                    AnimatedContentScope.SlideDirection.Left
-                }
-                else AnimatedContentScope.SlideDirection.Right,tween(300))
+                slideOutOfContainer(towards = AnimatedContentScope.SlideDirection.Right,tween(300))
             }) {
-            JadwalScreen(navController = navController)
+            JadwalScreen(navController = navController,dark = dark)
         }
 
         composable(Routes.Profile.route,
             enterTransition = {
-                slideIntoContainer(towards =  if (enteringc.value) AnimatedContentScope.SlideDirection.Left else AnimatedContentScope.SlideDirection.Right ,tween(300))
+                slideIntoContainer(towards =   AnimatedContentScope.SlideDirection.Right ,tween(300))
             },
             exitTransition = {
-                entering.value = true
-                enterings.value = true
-
                 slideOutOfContainer(towards =  AnimatedContentScope.SlideDirection.Right,tween(300))
             }) {
-            ProfilScreen(navController = navController)
+            ProfilScreen(navController = navController,dark = dark, viewModel = profileViewModel)
         }
 
     }

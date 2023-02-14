@@ -4,6 +4,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,6 +35,7 @@ fun OnBoardingScreen(
     systemUiController.setStatusBarColor(
         color = MaterialTheme.colors.background
     )
+    val state = rememberScrollState()
 
     val image = listOf(
         R.drawable.onboarding_a,
@@ -69,7 +72,8 @@ fun OnBoardingScreen(
                 modifier = Modifier
                     .padding(14.dp)
                     .fillMaxHeight()
-                    .wrapContentHeight(CenterVertically),
+                    .wrapContentHeight(CenterVertically)
+                    .verticalScroll(state),
                 horizontalAlignment = CenterHorizontally,
             ) {
                 HorizontalPager(
@@ -84,7 +88,7 @@ fun OnBoardingScreen(
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 PagerDot(3,pagerState.currentPage)
-                Spacer(modifier = Modifier.height(60.dp))
+                Spacer(modifier = Modifier.height(24.dp))
                 ButtonClick(color = MaterialTheme.colors.primary, text = stringResource(id = R.string.masuk) ) {
                     click.invoke(false)
                     navController.navigate(Routes.Login.route)

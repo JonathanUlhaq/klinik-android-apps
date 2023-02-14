@@ -24,7 +24,7 @@ fun WidgetAnnouncement(state: PagerState) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .height(110.dp)
+            .height(120.dp)
     ) {
         Image(
             painter = painterResource(id = R.drawable.announce_image),
@@ -47,7 +47,7 @@ fun WidgetAnnouncement(state: PagerState) {
                 state = state) {
                 AnnounceItem()
             }
-            Spacer(modifier = Modifier.height(7.dp))
+            Spacer(modifier = Modifier.height(6.dp))
             PagerDot(
                 index = 2, currentIndex = state.currentPage,
                 color = MaterialTheme.colors.onSurface.copy(0.6F)

@@ -33,6 +33,7 @@ fun PagerDot(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentWidth(Alignment.CenterHorizontally)
+            .padding(top=5.dp)
     ) {
         LazyRow(
             horizontalArrangement = Arrangement.Center,

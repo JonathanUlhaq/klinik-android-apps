@@ -27,7 +27,7 @@ fun OnboardingContent(
             painter = painterResource(id = image),
             contentDescription = null,
             modifier = Modifier
-                .size(400.dp)
+                .size(350.dp)
                 .padding(top = 30.dp, bottom = 20.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))

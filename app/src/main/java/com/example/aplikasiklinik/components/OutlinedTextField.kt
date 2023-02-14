@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.sp
             backgroundColor = MaterialTheme.colors.primary,
             unfocusedBorderColor = MaterialTheme.colors.onSurface.copy(0.8F),
             focusedBorderColor = MaterialTheme.colors.onSurface,
-            trailingIconColor = Color.White,
+            leadingIconColor = Color.White,
             focusedLabelColor = Color.White,
             unfocusedLabelColor = Color.White,
             cursorColor = Color.White

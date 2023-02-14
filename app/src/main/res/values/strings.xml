@@ -50,5 +50,14 @@
     <string name="desc_queue_history">Mau tau riwayat waktu berobat kamu ? cek disini</string>
     <string name="anounce_title">Pengumuman</string>
 
+<!--    Jadwal Praktik Dokter-->
+    <string name="jadwal_praktik_dokter">Jadwal Praktik Dokter</string>
+    <string name="dummy_desc_jadwal">Yuk cek jadwal praktik dokter di Klinik Triyola agar sesuai dengan jadwal kebutuhan kamu</string>
+    <string name="nama_dokter">\"Nama : \ "</string>
+    <string name="poli">\"Poli : \ "</string>
+    <string name="jam_praktik">\"Jam Praktik : \ "</string>
+    <string name="dummy_dokter_name">dr. Yosa Angga Oktama</string>
+    <string name="dummy_poli">Umum</string>
+    <string name="dummy_jam_praktik">08.00 - 12.00 WIB</string>
 
 </resources>

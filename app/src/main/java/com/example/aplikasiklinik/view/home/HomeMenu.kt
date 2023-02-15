@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -14,22 +16,36 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun HomeMenu(dark:Boolean,
-             click:()->Unit) {
+fun HomeMenu(
+    dark: Boolean,
+    click: () -> Unit
+) {
     val navController = rememberAnimatedNavController()
+    val bottombarShow = remember {
+        mutableStateOf(false)
+    }
+
     Scaffold(
         content = {
             Surface(
                 modifier = Modifier
                     .padding(it)
             ) {
-                NavigationAdapter(dark = dark, navController= navController ) {
+                NavigationAdapter(dark = dark, navController = navController,
+                    showBottombar = {
+                        bottombarShow.value = false
+                    },
+                    defaultBottom = {
+                        bottombarShow.value = it
+                    }
+                ) {
                     click.invoke()
                 }
             }
         },
         bottomBar = {
-            BotNavBar(navController = navController)
+            if (bottombarShow.value)
+                BotNavBar(navController = navController)
         }
     )
 }

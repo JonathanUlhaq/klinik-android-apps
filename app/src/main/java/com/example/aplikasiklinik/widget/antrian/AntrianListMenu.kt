@@ -14,10 +14,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.aplikasiklinik.R
+import com.example.aplikasiklinik.view.navigation.Routes
 
 @Composable
-fun AntrianListMenu() {
+fun AntrianListMenu(
+    navController: NavController) {
     Column(
         modifier = Modifier
             .padding(14.dp)
@@ -39,7 +42,7 @@ fun AntrianListMenu() {
             color = MaterialTheme.colors.primaryVariant,
             icon = R.drawable.queue_regist_icon
         ) {
-
+            navController.navigate(Routes.FiturRoute.route+"/"+Routes.AntrianRegister.route)
         }
         Spacer(modifier = Modifier.height(16.dp))
         Divider(
@@ -57,7 +60,7 @@ fun AntrianListMenu() {
             color = MaterialTheme.colors.primaryVariant,
             icon = R.drawable.current_queue_icon
         ) {
-
+            navController.navigate(Routes.FiturRoute.route+"/"+Routes.CurrentAntrian.route)
         }
         Spacer(modifier = Modifier.height(16.dp))
         Divider(
@@ -75,7 +78,7 @@ fun AntrianListMenu() {
             color = MaterialTheme.colors.primaryVariant,
             icon = R.drawable.queue_history_icon
         ) {
-
+            navController.navigate(Routes.FiturRoute.route+"/"+Routes.AntrianHistory.route)
         }
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.aplikasiklinik.R
+import com.example.aplikasiklinik.view.navigation.Routes
 
 @Composable
 fun AntrianMenu(
@@ -21,16 +22,15 @@ fun AntrianMenu(
     click:() -> Unit
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .clickable {
+                click.invoke()
+            }
     ) {
         Surface(
             shape = CircleShape,
-            color = color.copy(0.14F),
-            modifier = Modifier
-                .clickable {
-                    click.invoke()
-                }
-        ) {
+            color = color.copy(0.14F)) {
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = null,

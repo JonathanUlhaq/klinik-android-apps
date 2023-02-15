@@ -11,10 +11,14 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.example.aplikasiklinik.view.antrian.AntrianScreen
+import com.example.aplikasiklinik.view.currentantrian.CurrentAntrian
 import com.example.aplikasiklinik.view.jadwal.JadwalScreen
 import com.example.aplikasiklinik.view.login.LoginScreen
 import com.example.aplikasiklinik.view.login.LoginViewModel
+import com.example.aplikasiklinik.view.mainfitur.MainFitur
 import com.example.aplikasiklinik.view.onboarding.OnBoardingScreen
 import com.example.aplikasiklinik.view.otp.OTPViewModel
 import com.example.aplikasiklinik.view.otp.OtpScreen
@@ -33,6 +37,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 fun NavigationAdapter(
     dark:Boolean,
     navController:NavHostController,
+    showBottombar:() -> Unit,
+    defaultBottom:(Boolean) -> Unit,
     click:() -> Unit
 ) {
 
@@ -53,6 +59,10 @@ fun NavigationAdapter(
         mutableStateOf(false)
     }
 
+    val defaultValue = remember {
+        mutableStateOf(true)
+    }
+
     AnimatedNavHost(navController = navController, startDestination = Routes.HomeAntrian.route ) {
 
         composable(Routes.HomeAntrian.route,
@@ -62,6 +72,7 @@ fun NavigationAdapter(
             exitTransition = {
                 slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else if (entering.value) AnimatedContentScope.SlideDirection.Right else AnimatedContentScope.SlideDirection.Left,tween(300))
             }) {
+            defaultBottom.invoke(true)
             AntrianScreen(
                 dark,
                 navController
@@ -90,6 +101,20 @@ fun NavigationAdapter(
                 slideOutOfContainer(towards =  AnimatedContentScope.SlideDirection.Right,tween(300))
             }) {
             ProfilScreen(navController = navController,dark = dark, viewModel = profileViewModel)
+        }
+
+        composable(Routes.FiturRoute.route+"/{route}",
+            enterTransition = {
+                fadeIn(tween(700))
+            },
+            arguments = listOf(navArgument("route") {
+                NavType.StringType
+            })
+        ) {
+            defaultBottom.invoke(false)
+            MainFitur(it.arguments?.getString("route")!!,dark = dark, click = {
+                click.invoke()
+            })
         }
 
     }

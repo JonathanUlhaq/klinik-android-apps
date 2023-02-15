@@ -125,7 +125,6 @@ fun OtpScreen(
                                 navController
                             ) {otpValue ->
                                 viewModel.otpValue.value = otpValue
-                                Log.d("OTPMU ADALAH ", viewModel.otpValue.value)
                             }
                             Spacer(
                                 modifier = Modifier

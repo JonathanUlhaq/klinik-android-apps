@@ -23,10 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.aplikasiklinik.R
-import com.example.aplikasiklinik.components.ButtonClick
-import com.example.aplikasiklinik.components.CustomTopBar
-import com.example.aplikasiklinik.components.FiturHeader
-import com.example.aplikasiklinik.components.TextArea
+import com.example.aplikasiklinik.components.*
 
 @Composable
 fun RegistAntrian(
@@ -122,80 +119,4 @@ fun RegistAntrian(
     }
 }
 
-@Composable
-fun ButtonDropDown(
-    dropDown: MutableState<Boolean>,
-    buttonSize: MutableState<Size>,
-    poli: MutableState<String>,
-    iconDrop: Int,
-    typePoli: List<String>
-) {
-    OutlinedButton(
-        onClick = { dropDown.value = !dropDown.value },
-        elevation = ButtonDefaults.elevation(0.dp),
-        shape = RoundedCornerShape(20.dp),
-        colors = ButtonDefaults.outlinedButtonColors(
-            backgroundColor = MaterialTheme.colors.onBackground,
-            contentColor = MaterialTheme.colors.primaryVariant
-        ),
-        border = BorderStroke(2.dp, MaterialTheme.colors.primaryVariant),
-        modifier = Modifier
-            .onGloballyPositioned { coor ->
-                buttonSize.value = coor.size.toSize()
-            }
 
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.poli_icon),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(18.dp)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = poli.value,
-                    style = MaterialTheme.typography.h1,
-                    fontSize = 12.sp,
-                )
-            }
-            Spacer(modifier = Modifier.weight(1F))
-            Icon(
-                painter = painterResource(id = iconDrop),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(14.dp)
-            )
-        }
-
-    }
-
-    DropdownMenu(
-        modifier = Modifier
-            .width(with(LocalDensity.current) {
-                buttonSize.value.width.toDp()
-            })
-            .background(MaterialTheme.colors.background),
-        expanded = dropDown.value,
-        onDismissRequest = { dropDown.value = false }) {
-        typePoli.forEach { item ->
-            DropdownMenuItem(onClick = {
-                poli.value = item
-                dropDown.value = false
-            }) {
-                Text(
-                    text = item,
-                    style = MaterialTheme.typography.body2,
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colors.primaryVariant
-                )
-            }
-        }
-    }
-}

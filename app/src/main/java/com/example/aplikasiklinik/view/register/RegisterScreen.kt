@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.components.VerificationButton
+import com.example.aplikasiklinik.view.mainactivity.MainActivityViewModel
 import com.example.aplikasiklinik.view.navigation.Routes
 import com.example.aplikasiklinik.widget.register.RegisForm
 import com.example.aplikasiklinik.widget.register.RegisterViewModel
@@ -27,9 +28,11 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun RegisterScreen(
     navController: NavController,
     viewModel:RegisterViewModel,
+    mainVm:MainActivityViewModel,
     login:(Boolean) -> Unit
 ) {
 
+    val darkMode = mainVm.uiState.collectAsState().value.first().darkMode
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
         color = MaterialTheme.colors.background
@@ -67,7 +70,7 @@ fun RegisterScreen(
                             Spacer(modifier = Modifier.weight(1F))
 
                             Image(
-                                painter = painterResource(id = R.drawable.register_image),
+                                painter = painterResource(id = if (darkMode) R.drawable.dark_register_image else  R.drawable.register_image),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(112.dp)

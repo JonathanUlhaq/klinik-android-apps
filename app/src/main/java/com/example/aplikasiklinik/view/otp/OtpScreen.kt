@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.aplikasiklinik.R
+import com.example.aplikasiklinik.view.mainactivity.MainActivityViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -25,9 +26,11 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun OtpScreen(
     dark:Boolean,
     navController: NavController,
+    mainVm:MainActivityViewModel,
     viewModel:OTPViewModel
 ) {
 
+    val darkMode = mainVm.uiState.collectAsState().value.first().darkMode
     val systemUiController = rememberSystemUiController()
     if (dark) {
         systemUiController.setStatusBarColor(
@@ -86,7 +89,7 @@ fun OtpScreen(
                         Spacer(modifier = Modifier.weight(1F))
 
                         Image(
-                            painter = painterResource(id = R.drawable.verifikasi_image),
+                            painter = painterResource(id = if (darkMode) R.drawable.dark_verifikasi_image else R.drawable.verifikasi_image),
                             contentDescription = null,
                             modifier = Modifier
                                 .size(112.dp)

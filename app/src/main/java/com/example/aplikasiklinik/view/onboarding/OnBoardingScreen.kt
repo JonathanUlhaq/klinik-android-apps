@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -20,6 +21,7 @@ import androidx.navigation.NavController
 import com.example.aplikasiklinik.PagerDot
 import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.components.ButtonClick
+import com.example.aplikasiklinik.view.mainactivity.MainActivityViewModel
 import com.example.aplikasiklinik.view.navigation.Routes
 import com.example.aplikasiklinik.widget.OnboardingContent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -28,10 +30,12 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 fun OnBoardingScreen(
     navController: NavController,
+    mainVm:MainActivityViewModel,
     click:(Boolean) -> Unit
 ) {
 
     val systemUiController = rememberSystemUiController()
+    val uiState = mainVm.uiState.collectAsState().value
     systemUiController.setSystemBarsColor(
         color = MaterialTheme.colors.background
     )
@@ -40,11 +44,20 @@ fun OnBoardingScreen(
     )
     val state = rememberScrollState()
 
+
     val image = listOf(
         R.drawable.onboarding_a,
         R.drawable.onboarding_b,
         R.drawable.onboarding_c
     )
+
+    val Darkimage = listOf(
+        R.drawable.dark_onboarding_a,
+        R.drawable.dark_onboarding_b,
+        R.drawable.dark_onboarding_c
+    )
+
+    val listImage = if (uiState.first().darkMode) Darkimage else image
 
     val title = listOf(
         R.string.title_ob_a,
@@ -85,7 +98,7 @@ fun OnBoardingScreen(
                     modifier = Modifier) {index ->
                     OnboardingContent(
                         title = title[index],
-                        image = image[index],
+                        image = listImage[index],
                         desc = desc[index]
                     )
                 }

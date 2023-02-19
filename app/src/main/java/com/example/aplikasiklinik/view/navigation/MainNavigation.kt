@@ -17,6 +17,7 @@ import com.example.aplikasiklinik.view.home.HomeMenu
 import com.example.aplikasiklinik.view.jadwal.JadwalScreen
 import com.example.aplikasiklinik.view.login.LoginScreen
 import com.example.aplikasiklinik.view.login.LoginViewModel
+import com.example.aplikasiklinik.view.mainactivity.MainActivityViewModel
 import com.example.aplikasiklinik.view.onboarding.OnBoardingScreen
 import com.example.aplikasiklinik.view.otp.OTPViewModel
 import com.example.aplikasiklinik.view.otp.OtpScreen
@@ -41,6 +42,7 @@ fun MainNavigation(
     val regViewModel = hiltViewModel<RegisterViewModel>()
     val loginViewModel = hiltViewModel<LoginViewModel>()
     val optViewModel = hiltViewModel<OTPViewModel>()
+    val mainVm = hiltViewModel<MainActivityViewModel>()
 
     val login = remember {
         mutableStateOf(false)
@@ -68,7 +70,7 @@ fun MainNavigation(
             exitTransition = {
                 slideOutOfContainer(towards = if (boardingExit.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Down,tween(300))
             }) {
-            OnBoardingScreen(navMain) {
+            OnBoardingScreen(navMain,mainVm) {
                 login.value = it
                 boardingExit.value = it
             }
@@ -81,7 +83,7 @@ fun MainNavigation(
             exitTransition = {
                 slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Down else AnimatedContentScope.SlideDirection.Right,tween(300))
             }) {
-            RegisterScreen(navMain,regViewModel) {
+            RegisterScreen(navMain,regViewModel,mainVm) {
                 login.value = it
             }
         }
@@ -94,7 +96,7 @@ fun MainNavigation(
             exitTransition = {
                 slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Left,tween(300))
             }) {
-            LoginScreen(navController = navMain,loginViewModel)
+            LoginScreen(navController = navMain,mainVm,loginViewModel)
         }
 
         composable(Routes.Otp.route,
@@ -104,7 +106,7 @@ fun MainNavigation(
             exitTransition = {
                 slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Left,tween(300))
             }) {
-            OtpScreen(dark,navMain,OTPViewModel())
+            OtpScreen(dark,navMain,mainVm,OTPViewModel())
         }
 
         composable(Routes.Home.route,

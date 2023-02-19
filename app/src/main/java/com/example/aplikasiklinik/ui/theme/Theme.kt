@@ -45,6 +45,9 @@ fun AplikasiKlinikTheme(
         systemUiController.setSystemBarsColor(
             color = MaterialTheme.colors.onPrimary
         )
+        systemUiController.setNavigationBarColor(
+            color = MaterialTheme.colors.background
+        )
     }else{
         systemUiController.setStatusBarColor(
             color = MaterialTheme.colors.primaryVariant

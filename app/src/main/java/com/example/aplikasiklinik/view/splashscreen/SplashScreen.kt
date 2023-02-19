@@ -28,8 +28,11 @@ fun SplashScreen(
 ) {
 
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(
+    systemUiController.setSystemBarsColor(
         color = MaterialTheme.colors.primary
+    )
+    systemUiController.setNavigationBarColor(
+        color = MaterialTheme.colors.background
     )
 
 

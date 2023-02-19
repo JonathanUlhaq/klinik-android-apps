@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.components.DatePicker
+import com.example.aplikasiklinik.components.EditButton
+import com.example.aplikasiklinik.widget.profil.ProfilContent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
@@ -37,8 +39,8 @@ fun ProfilScreen(
     navController: NavController
 ) {
 
-    val dateColor by animateColorAsState(targetValue = if (viewModel.edit.value) MaterialTheme.colors.surface else MaterialTheme.colors.surface.copy(0.3F))
-    val dateBorderColor by animateColorAsState(targetValue = if (viewModel.edit.value) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.primaryVariant.copy(0.5F) )
+    val dateColor by animateColorAsState(targetValue = if (viewModel.edit.value) MaterialTheme.colors.surface else MaterialTheme.colors.surface.copy(0.7F))
+    val dateBorderColor by animateColorAsState(targetValue = if (viewModel.edit.value) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.primaryVariant.copy(0.7F) )
 
 
     val current = LocalContext.current
@@ -159,89 +161,9 @@ fun ProfilScreen(
     }
 }
 
-@Composable
-fun ProfilContent(
-    icon: Int,
-    desc: MutableState<String>,
-    boolean: Boolean,
-    keyboard:KeyboardType
-) {
 
-    OutlinedTextField(value = desc.value,
-        onValueChange = { desc.value = it },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            textColor = MaterialTheme.colors.surface,
-            backgroundColor = Color.Transparent,
-            disabledBorderColor = MaterialTheme.colors.primaryVariant.copy(0.5F),
-            unfocusedBorderColor = MaterialTheme.colors.primaryVariant.copy(0.8F),
-            focusedBorderColor = MaterialTheme.colors.primaryVariant,
-            unfocusedLabelColor = MaterialTheme.colors.primaryVariant.copy(0.8F),
-            focusedLabelColor = MaterialTheme.colors.primaryVariant,
-            leadingIconColor = MaterialTheme.colors.primaryVariant,
-            disabledLeadingIconColor = MaterialTheme.colors.primaryVariant.copy(0.5F)
-        ),
-        leadingIcon = {
-            Icon(
-                painter = painterResource(id = icon),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(30.dp)
-            )
-        },
-        enabled = boolean,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboard),
-        shape = RoundedCornerShape(12.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-    )
 
-//    Row(
-//        verticalAlignment = Alignment.CenterVertically
-//    ) {
-//        Icon(
-//            painter = painterResource(id = icon),
-//            contentDescription = null,
-//            tint = MaterialTheme.colors.primaryVariant,
-//            modifier = Modifier
-//                .size(30.dp)
-//        )
-//        Spacer(modifier = Modifier.width(20.dp))
-//        Text(
-//            text = desc,
-//            style = MaterialTheme.typography.body1,
-//            color = MaterialTheme.colors.surface
-//        )
-//    }
-}
 
-@Composable
-fun EditButton(boolean: Boolean,click: () -> Unit) {
-
-    val icons by animateIntAsState(targetValue = if (boolean) R.drawable.save_icon else R.drawable.edit_icon)
-    val colors by animateColorAsState(targetValue = if (boolean) MaterialTheme.colors.secondary else MaterialTheme.colors.primary)
-
-    Button(
-        onClick = { click.invoke() },
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = colors,
-            contentColor = MaterialTheme.colors.onSurface
-        ),
-        shape = RoundedCornerShape(15.dp),
-        elevation = ButtonDefaults.elevation(0.dp)
-    ) {
-        Icon(
-            painter = painterResource(id = icons),
-            contentDescription = null,
-            modifier = Modifier
-                .size(15.dp)
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        Text(
-            text = if (boolean) "Simpan" else "Ubah",
-            style = MaterialTheme.typography.body2
-        )
-    }
-}
 
 
 

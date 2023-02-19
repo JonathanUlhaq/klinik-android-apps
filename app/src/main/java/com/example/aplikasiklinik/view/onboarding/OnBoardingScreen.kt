@@ -32,7 +32,10 @@ fun OnBoardingScreen(
 ) {
 
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(
+    systemUiController.setSystemBarsColor(
+        color = MaterialTheme.colors.background
+    )
+    systemUiController.setNavigationBarColor(
         color = MaterialTheme.colors.background
     )
     val state = rememberScrollState()

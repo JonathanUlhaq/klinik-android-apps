@@ -1,5 +1,6 @@
 package com.example.aplikasiklinik.widget.antrian
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +16,10 @@ import androidx.compose.ui.unit.sp
 import com.example.aplikasiklinik.R
 
 @Composable
-fun WidgetInformation() {
+fun WidgetInformation(
+    antrian:Int,
+    click:() -> Unit
+) {
     Row {
         Surface(
             color = MaterialTheme.colors.primary,
@@ -23,6 +27,8 @@ fun WidgetInformation() {
             modifier = Modifier
                 .width(160.dp)
                 .height(150.dp)
+                .clickable { click.invoke() }
+
         ) {
             Column(
                 modifier = Modifier
@@ -51,7 +57,7 @@ fun WidgetInformation() {
                             .wrapContentWidth(Alignment.End)
                     ) {
                         Text(
-                            text = "66",
+                            text = "$antrian",
                             style = MaterialTheme.typography.h1,
                             fontSize = 44.sp,
                             color = MaterialTheme.colors.onSurface

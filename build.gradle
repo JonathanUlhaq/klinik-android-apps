@@ -4,6 +4,7 @@ buildscript {
         hilt_dagger = '2.44'
         lifecycle_version = '2.5.1'
         room_version = '2.4.3'
+        core_version = '1.6.0'
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

@@ -37,11 +37,14 @@ fun AntrianHistory(
         mutableStateOf(false)
     }
 
+    val currentIndex = remember {
+        mutableStateOf<Int?>(null)
+    }
+
     val search = remember {
         mutableStateOf("")
     }
 
-    val iconDrop by animateIntAsState(targetValue = if (dropDown.value) R.drawable.arrow_down else R.drawable.arrow_right)
 
     Scaffold(
         backgroundColor = MaterialTheme.colors.background,
@@ -56,20 +59,29 @@ fun AntrianHistory(
         ) {
             Column {
                 FiturHeader()
-                Box(modifier = Modifier
-                    .padding(start = 14.dp, end = 14.dp, bottom = 8.dp)) {
+                Box(
+                    modifier = Modifier
+                        .padding(start = 14.dp, end = 14.dp, bottom = 8.dp)
+                ) {
                     SearchField(
-                        value = search ,
-                        label = "Cari riwayat tanggal berobat" ,
-                        icon = R.drawable.icon_search ,
-                        keyboardType = KeyboardType.Text ,
+                        value = search,
+                        label = "Cari riwayat tanggal berobat",
+                        icon = R.drawable.icon_search,
+                        keyboardType = KeyboardType.Text,
                         eventFocus = { /*TODO*/ }) {
 
                     }
                 }
                 LazyColumn(content = {
-                    items(5) {
-                        AntrianHistoryContent(dropDown, iconDrop)
+                    items(5) {index ->
+                        dropDown.value = index == currentIndex.value
+                        AntrianHistoryContent(dropDown.value,index) {
+                            if (currentIndex.value == index) {
+                                currentIndex.value = null
+                            } else {
+                                currentIndex.value = it
+                            }
+                        }
                     }
                 })
 

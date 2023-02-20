@@ -13,8 +13,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.aplikasiklinik.utils.NotificationManager
 import com.example.aplikasiklinik.widget.antrian.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
@@ -30,6 +32,17 @@ fun AntrianScreen(
     click: () -> Unit
 ) {
 
+//    Nanti dihapus
+    val antrian = remember {
+        mutableStateOf(5)
+    }
+
+    val context = LocalContext.current
+
+    if (antrian.value == 2 ) {
+        val notif = NotificationManager(context,"Persiapan, antrian kurang ${antrian.value} orang lagi")
+        notif.notificationManager()
+    }
 
     val systemUiController = rememberSystemUiController()
     if(dark){
@@ -99,7 +112,9 @@ fun AntrianScreen(
                             modifier = Modifier
                                 .height(20.dp)
                         )
-                        WidgetInformation()
+                        WidgetInformation(antrian.value) {
+                            antrian.value = antrian.value - 1
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.height(10.dp))

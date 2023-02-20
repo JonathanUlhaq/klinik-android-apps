@@ -34,15 +34,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setContent {
-            val dark = remember {
-                mutableStateOf(false)
-            }
             val viewModel by viewModels<MainActivityViewModel>()
             val state = viewModel.uiState.collectAsState().value
 
             AplikasiKlinikTheme(
                 darkTheme = if (state.isEmpty()) false else state.first().darkMode
-
             ) {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -50,25 +46,15 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     MainScreen(if (state.isEmpty()) false else state.first().darkMode) {
-                        viewModel.insertBoolean(ThemeModeModel(0,!state.first().darkMode))
+                        viewModel.insertBoolean(ThemeModeModel(0, !state.first().darkMode))
                     }
                 }
             }
         }
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) {
-            view,insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { view, insets ->
             val bottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
             view.updatePadding(bottom = bottom)
             insets
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    AplikasiKlinikTheme {
-
     }
 }

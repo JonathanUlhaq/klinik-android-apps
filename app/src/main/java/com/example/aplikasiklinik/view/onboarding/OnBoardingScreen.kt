@@ -9,7 +9,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -23,7 +22,7 @@ import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.components.ButtonClick
 import com.example.aplikasiklinik.view.mainactivity.MainActivityViewModel
 import com.example.aplikasiklinik.view.navigation.Routes
-import com.example.aplikasiklinik.widget.OnboardingContent
+import com.example.aplikasiklinik.widget.onboarding.OnboardingContent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -51,13 +50,13 @@ fun OnBoardingScreen(
         R.drawable.onboarding_c
     )
 
-    val Darkimage = listOf(
+    val darkImage = listOf(
         R.drawable.dark_onboarding_a,
         R.drawable.dark_onboarding_b,
         R.drawable.dark_onboarding_c
     )
 
-    val listImage = if (uiState.first().darkMode) Darkimage else image
+    val listImage = if (uiState.first().darkMode) darkImage else image
 
     val title = listOf(
         R.string.title_ob_a,

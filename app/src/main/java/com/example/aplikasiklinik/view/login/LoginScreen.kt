@@ -1,6 +1,5 @@
 package com.example.aplikasiklinik.view.login
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -11,7 +10,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -22,7 +20,6 @@ import com.example.aplikasiklinik.components.OutlinedTextFields
 import com.example.aplikasiklinik.components.VerificationButton
 import com.example.aplikasiklinik.view.mainactivity.MainActivityViewModel
 import com.example.aplikasiklinik.view.navigation.Routes
-import com.example.aplikasiklinik.widget.register.RegisForm
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable

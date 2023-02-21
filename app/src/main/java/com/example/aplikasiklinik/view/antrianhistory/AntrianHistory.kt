@@ -1,33 +1,26 @@
 package com.example.aplikasiklinik.view.antrianhistory
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.components.CustomTopBar
 import com.example.aplikasiklinik.components.FiturHeader
-import com.example.aplikasiklinik.components.OutlinedTextFields
 import com.example.aplikasiklinik.components.SearchField
-import com.example.aplikasiklinik.view.navigation.Routes
 import com.example.aplikasiklinik.widget.antrianhistory.AntrianHistoryContent
-import com.example.aplikasiklinik.widget.jadwal.FontContent
 
 @Composable
 fun AntrianHistory(
@@ -49,7 +42,7 @@ fun AntrianHistory(
     Scaffold(
         backgroundColor = MaterialTheme.colors.background,
         topBar = {
-            CustomTopBar(navController, "Riwayat Antrian")
+            CustomTopBar(navController, stringResource(id = R.string.title_queue_history))
         }
     ) {
         Surface(
@@ -65,7 +58,7 @@ fun AntrianHistory(
                 ) {
                     SearchField(
                         value = search,
-                        label = "Cari riwayat tanggal berobat",
+                        label = stringResource(R.string.search_riwayat),
                         icon = R.drawable.icon_search,
                         keyboardType = KeyboardType.Text,
                         eventFocus = { /*TODO*/ }) {
@@ -75,16 +68,15 @@ fun AntrianHistory(
                 LazyColumn(content = {
                     items(5) {index ->
                         dropDown.value = index == currentIndex.value
-                        AntrianHistoryContent(dropDown.value,index) {
+                        AntrianHistoryContent(dropDown.value,index) { currentIndexed ->
                             if (currentIndex.value == index) {
                                 currentIndex.value = null
                             } else {
-                                currentIndex.value = it
+                                currentIndex.value = currentIndexed
                             }
                         }
                     }
                 })
-
             }
         }
     }

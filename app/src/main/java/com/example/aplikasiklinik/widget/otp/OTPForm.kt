@@ -1,6 +1,5 @@
 package com.example.aplikasiklinik.widget.otp
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,11 +38,11 @@ fun OTPForm(
         mutableStateOf("")
     }
     val keyboardController = LocalSoftwareKeyboardController.current
-    val context = LocalContext.current
     val focusRequester = FocusRequester()
 
     string.invoke(otpValue)
-    BasicTextField(value = otpValue,
+    BasicTextField(
+        value = otpValue,
         onValueChange = {
             if (it.length <= 4) {
                 otpValue = it
@@ -94,7 +93,8 @@ fun OTPForm(
                 if (it.isFocused) {
                     keyboardController?.show()
                 }
-            },
+            }
+            .imePadding(),
         keyboardActions = KeyboardActions {
             keyboardController?.hide()
         }

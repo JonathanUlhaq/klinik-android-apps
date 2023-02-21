@@ -32,9 +32,6 @@ fun HomeMenu(
                     .padding(it)
             ) {
                 NavigationAdapter(dark = dark, navController = navController,
-                    showBottombar = {
-                        bottombarShow.value = false
-                    },
                     defaultBottom = {
                         bottombarShow.value = it
                     }

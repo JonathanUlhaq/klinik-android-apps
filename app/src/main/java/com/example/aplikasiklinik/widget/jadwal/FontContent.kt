@@ -1,6 +1,5 @@
 package com.example.aplikasiklinik.widget.jadwal
 
-import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

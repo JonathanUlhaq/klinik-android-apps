@@ -13,7 +13,6 @@ import com.example.aplikasiklinik.view.home.HomeMenu
 import com.example.aplikasiklinik.view.registantrian.RegistAntrian
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

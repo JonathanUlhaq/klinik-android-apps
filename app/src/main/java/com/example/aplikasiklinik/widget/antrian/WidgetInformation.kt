@@ -123,7 +123,7 @@ fun WidgetInformation(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "dr. Yosa Angga Oktana",
+                    text = stringResource(R.string.doctor_name),
                     style = MaterialTheme.typography.body2,
                     color = MaterialTheme.colors.onSurface
                 )

@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.widget.jadwal.FontContent
@@ -57,15 +58,15 @@ fun AntrianHistoryContent(
                 Column {
                     Spacer(modifier = Modifier.height(12.dp))
                     FontContent(
-                        title = "Poli : ",
-                        desc = "Umum ",
+                        title = stringResource(R.string.poli),
+                        desc = stringResource(R.string.umum),
                         size = 16,
                         color = MaterialTheme.colors.primaryVariant
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     FontContent(
-                        title = "Status : ",
-                        desc = "Sudah dilayani",
+                        title = stringResource(R.string.status),
+                        desc = stringResource(R.string.status_result_dummy),
                         size = 16,
                         color = MaterialTheme.colors.primaryVariant
                     )

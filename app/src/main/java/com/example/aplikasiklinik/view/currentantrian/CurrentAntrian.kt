@@ -1,7 +1,6 @@
 package com.example.aplikasiklinik.view.currentantrian
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -12,10 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -32,7 +30,7 @@ fun CurrentAntrian(
     Scaffold(
         backgroundColor = MaterialTheme.colors.background,
         topBar = {
-            CustomTopBar(navController,"Antrian Sekarang")
+            CustomTopBar(navController, stringResource(R.string.antrian_sekarang))
         }
     ) {
         Surface(
@@ -56,7 +54,7 @@ fun CurrentAntrian(
                             .padding(14.dp)
                     ) {
                         Text(
-                            text = "Pasien BPJS",
+                            text = stringResource(R.string.pasien_status),
                             style = MaterialTheme.typography.h1,
                             fontSize = 16.sp,
                             color = MaterialTheme.colors.primaryVariant
@@ -87,12 +85,12 @@ fun CurrentAntrian(
                             )
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
-                                text = "Ragnar Holbrok",
+                                text = stringResource(R.string.pasien_name),
                                 style = MaterialTheme.typography.body1,
                                 color = MaterialTheme.colors.primaryVariant
                             )
                         }
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(20.dp))
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -127,7 +125,7 @@ fun CurrentAntrian(
                         horizontalAlignment = CenterHorizontally
                     ) {
                         Text(
-                            text = "Pasien BPJS",
+                            text = stringResource(R.string.pasien_status),
                             style = MaterialTheme.typography.h1,
                             fontSize = 14.sp,
                             color = MaterialTheme.colors.primaryVariant
@@ -150,7 +148,7 @@ fun CurrentAntrian(
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "Kurang 1 antrian",
+                            text = stringResource(R.string.dummy_antrian_count),
                             style = MaterialTheme.typography.body1,
                             color = MaterialTheme.colors.primaryVariant
                         )
@@ -163,32 +161,56 @@ fun CurrentAntrian(
                     modifier = Modifier
                         .padding(start = 14.dp, end = 14.dp)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(14.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.date_icon_svg),
-                            contentDescription = null,
-                            tint = MaterialTheme.colors.primaryVariant,
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(
-                            text = "06/6/666",
-                            style = MaterialTheme.typography.body1,
-                            color = MaterialTheme.colors.primaryVariant
-                        )
+                                .fillMaxWidth()
+                                .padding(start = 14.dp, end = 14.dp, top = 14.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.date_icon_svg),
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.primaryVariant,
+                                modifier = Modifier
+                                    .size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = "06/6/666",
+                                style = MaterialTheme.typography.body1,
+                                color = MaterialTheme.colors.primaryVariant
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 14.dp, end = 14.dp, bottom = 14.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.status_icon),
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.primaryVariant,
+                                modifier = Modifier
+                                    .size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = stringResource(R.string.dummy_service_status),
+                                style = MaterialTheme.typography.body1,
+                                color = MaterialTheme.colors.primaryVariant
+                            )
+                        }
                     }
+
                 }
-                Spacer(modifier = Modifier.height(26.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                Box(modifier = Modifier
                    .padding(start = 14.dp, end = 14.dp)) {
                    ButtonClick(color = MaterialTheme.colors.error,
-                       text = "Batal Antri" ) {
+                       text = stringResource(R.string.batal_antri) ) {
 
                    }
                }

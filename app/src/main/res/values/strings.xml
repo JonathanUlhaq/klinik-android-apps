@@ -1,18 +1,18 @@
 <resources>
-    <string name="app_name">AplikasiKlinik</string>
+    <string name="app_name">Triyola Access</string>
 
 <!--Onboarding-->
     <string name="title_ob_a">Tentang Aplikasi</string>
     <string name="title_ob_b">Klinik Triyola</string>
     <string name="title_ob_c">Pelayanan</string>
 
-    <string name="desc_ob_a">Selamat datang di Aplikasi pelayanan, aplikasi yang membantu kamu untuk mendapatkan pelayanan</string>
+    <string name="desc_ob_a">Selamat datang di Aplikasi Triyola Access, aplikasi yang membantu kamu untuk mendapatkan pelayanan</string>
     <string name="desc_ob_b">Klinik Triyola adalah klinik kesehatan yang terletak di Nusukan, Surakarta</string>
     <string name="desc_ob_c">Klinik Triyola menyediaka pelayanan praktik umum dan praktik gigi</string>
 
 <!--    Register-->
     <string name="register_title">Daftar Akun</string>
-    <string name="register_desc">Yuk daftarkan akunmu untuk mendapatkan pelayanan digital terbaik dari Klinik Triyola</string>
+    <string name="register_desc">Yuk daftarkan akunmu agar terdaftar menjadi pasien dan mendapatkan pelayanan digital terbaik dari Klinik Triyola</string>
     <string name="nik">NIK</string>
     <string name="nama">Nama</string>
     <string name="tanggal_lahir">Tanggal Lahir</string>
@@ -53,11 +53,34 @@
 <!--    Jadwal Praktik Dokter-->
     <string name="jadwal_praktik_dokter">Jadwal Praktik Dokter</string>
     <string name="dummy_desc_jadwal">Yuk cek jadwal praktik dokter di Klinik Triyola agar sesuai dengan jadwal kebutuhan kamu</string>
-    <string name="nama_dokter">\"Nama : \ "</string>
-    <string name="poli">\"Poli : \ "</string>
-    <string name="jam_praktik">\"Jam Praktik : \ "</string>
+    <string name="nama_dokter">\Nama : \ </string>
+    <string name="poli">\Poli : \ "</string>
+    <string name="jam_praktik">\Jam Praktik : \ </string>
     <string name="dummy_dokter_name">dr. Yosa Angga Oktama</string>
     <string name="dummy_poli">Umum</string>
     <string name="dummy_jam_praktik">08.00 - 12.00 WIB</string>
+
+<!--    Register Antrian-->
+    <string name="pendaftaran_antrian">Pendaftaran Antrian</string>
+    <string name="regist_antrian_desc">Yuk lengkapi form dibawah ini agar kamu terdaftar sebagai antrian pasien online</string>
+    <string name="keluhan">Keluhan</string>
+    <string name="alergi">Alergi</string>
+    <string name="poli_umum">Umum</string>
+    <string name="poli_gigi">Gigi</string>
+
+<!--    Current Antrian-->
+    <string name="antrian_sekarang">Antrian Sekarang</string>
+    <string name="pasien_status">Pasien BPJS</string>
+    <string name="pasien_name">Ragnar Holbrok</string>
+    <string name="dummy_antrian_count">Kurang 1 antrian</string>
+    <string name="dummy_service_status">Belum dilayani</string>
+    <string name="batal_antri">Batal Antri</string>
+    <string name="search_riwayat">Cari riwayat tanggal berobat</string>
+    <string name="dummy_announce">Sementara Poli Gigi hanya buka pada hari Senin, Rabu dan Jumat</string>
+    <string name="doctor_name">dr. Yosa Angga Oktana</string>
+    <string name="umum">\Umum \</string>
+    <string name="status_result_dummy">Sudah dilayani</string>
+    <string name="status">\Status : \</string>
+
 
 </resources>

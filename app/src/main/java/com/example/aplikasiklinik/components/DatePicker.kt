@@ -46,7 +46,7 @@ fun DatePicker(
 
     val datePickerDialog = DatePickerDialog(
         context,
-            { _: DatePicker, year: Int, month: Int, day: Int ->
+            { _: DatePicker, _: Int, _: Int, _: Int ->
                 date.value = "$day/${month+1}/$year"
             }, year, month, day
     )

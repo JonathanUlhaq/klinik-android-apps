@@ -1,4 +1,4 @@
-package com.example.aplikasiklinik.widget
+package com.example.aplikasiklinik.widget.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

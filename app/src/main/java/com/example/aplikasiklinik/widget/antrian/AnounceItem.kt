@@ -26,7 +26,7 @@ fun AnnounceItem() {
                 .wrapContentWidth(Alignment.CenterHorizontally)
         ) {
             Text(
-                text = "Sementara Poli Gigi hanya buka pada hari Senin, Rabu dan Jumat",
+                text = stringResource(R.string.dummy_announce),
                 style = MaterialTheme.typography.body1,
                 color = MaterialTheme.colors.onSurface,
                 textAlign = TextAlign.Center,

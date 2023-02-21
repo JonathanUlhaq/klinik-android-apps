@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.aplikasiklinik.R
-import com.example.aplikasiklinik.view.navigation.Routes
 
 @Composable
 fun AntrianMenu(

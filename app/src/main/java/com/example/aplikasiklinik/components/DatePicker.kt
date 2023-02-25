@@ -62,14 +62,14 @@ fun DatePicker(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(10.dp),
+                    .padding(start = 10.dp, end = 10.dp, top = 16.dp, bottom = 16.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
                     Icon(painter = painterResource(id = R.drawable.date_icon_svg),
                         contentDescription = null,
                         tint = color,
                         modifier = Modifier
-                            .size(30.dp))
+                            .size(16.dp))
 
                 Spacer(modifier = Modifier.width(16.dp))
 

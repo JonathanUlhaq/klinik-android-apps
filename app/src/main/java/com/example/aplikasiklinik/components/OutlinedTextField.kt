@@ -53,7 +53,7 @@ import androidx.compose.ui.unit.sp
                 painter = painterResource(id = icon),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(16.dp)
             )
         },
         modifier = Modifier

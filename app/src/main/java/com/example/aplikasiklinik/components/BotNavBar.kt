@@ -76,7 +76,7 @@ fun BotNavBar(
 
                 val sized by animateIntAsState(
                     targetValue =
-                    if (currentMenu.value) 25 else 16
+                    if (currentMenu.value) 16 else 14
                 )
 
                 IconButton(onClick = {

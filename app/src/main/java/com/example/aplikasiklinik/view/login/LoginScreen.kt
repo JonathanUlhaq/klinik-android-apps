@@ -122,7 +122,7 @@ fun LoginScreen(
                                     style = MaterialTheme.typography.body2
                                 )
                                 Text(text = " "+stringResource(id = R.string.daftar),
-                                    color = MaterialTheme.colors.onPrimary,
+                                    color = MaterialTheme.colors.surface.copy(0.7F),
                                     style = MaterialTheme.typography.body2,
                                     modifier = Modifier
                                         .clickable { navController.navigate(Routes.Register.route) })

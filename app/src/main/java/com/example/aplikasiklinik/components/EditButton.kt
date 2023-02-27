@@ -18,7 +18,7 @@ import com.example.aplikasiklinik.R
 fun EditButton(boolean: Boolean,click: () -> Unit) {
 
     val icons by animateIntAsState(targetValue = if (!boolean) R.drawable.save_icon else R.drawable.edit_icon)
-    val colors by animateColorAsState(targetValue = if (!boolean) MaterialTheme.colors.secondary else MaterialTheme.colors.primary)
+    val colors by animateColorAsState(targetValue = if (!boolean) MaterialTheme.colors.primary else MaterialTheme.colors.secondary)
 
     Button(
         onClick = { click.invoke() },

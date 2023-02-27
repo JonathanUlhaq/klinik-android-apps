@@ -5,6 +5,7 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -30,14 +31,14 @@ class MainActivity : ComponentActivity() {
             val state = viewModel.uiState.collectAsState().value
 
             AplikasiKlinikTheme(
-                darkTheme = if (state.isEmpty()) false else state.first().darkMode
+                darkTheme = if (state.isEmpty()) false else state.first().darkMode || isSystemInDarkTheme()
             ) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen(if (state.isEmpty()) false else state.first().darkMode) {
+                    MainScreen(if (state.isEmpty()) false else state.first().darkMode || isSystemInDarkTheme()) {
                         viewModel.insertBoolean(ThemeModeModel(0, !state.first().darkMode))
                     }
                 }

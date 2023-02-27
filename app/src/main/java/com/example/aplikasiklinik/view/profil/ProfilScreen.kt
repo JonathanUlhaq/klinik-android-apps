@@ -38,7 +38,6 @@ fun ProfilScreen(
     val dateColor by animateColorAsState(targetValue = if (viewModel.edit.value) MaterialTheme.colors.surface else MaterialTheme.colors.surface.copy(0.7F))
     val dateBorderColor by animateColorAsState(targetValue = if (viewModel.edit.value) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.primaryVariant.copy(0.7F) )
 
-
     val current = LocalContext.current
     val scrollState = rememberScrollState()
     val systemUiController = rememberSystemUiController()

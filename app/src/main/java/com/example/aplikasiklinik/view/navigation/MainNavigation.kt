@@ -63,7 +63,7 @@ fun MainNavigation(
             exitTransition = {
                 slideOutOfContainer(towards = if (boardingExit.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Down,tween(300))
             }) {
-            OnBoardingScreen(navMain,mainVm) {
+            OnBoardingScreen(navMain,mainVm,dark) {
                 login.value = it
                 boardingExit.value = it
             }
@@ -76,7 +76,7 @@ fun MainNavigation(
             exitTransition = {
                 slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Down else AnimatedContentScope.SlideDirection.Right,tween(300))
             }) {
-            RegisterScreen(navMain,regViewModel,mainVm) {
+            RegisterScreen(navMain,regViewModel,mainVm,dark) {
                 login.value = it
             }
         }
@@ -89,7 +89,7 @@ fun MainNavigation(
             exitTransition = {
                 slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Left,tween(300))
             }) {
-            LoginScreen(navController = navMain,mainVm,loginViewModel)
+            LoginScreen(navController = navMain,dark,loginViewModel)
         }
 
         composable(Routes.Otp.route,

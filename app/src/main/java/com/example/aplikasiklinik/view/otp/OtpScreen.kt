@@ -26,7 +26,6 @@ fun OtpScreen(
     viewModel:OTPViewModel
 ) {
 
-    val darkMode = mainVm.uiState.collectAsState().value.first().darkMode
     val systemUiController = rememberSystemUiController()
     if (dark) {
         systemUiController.setStatusBarColor(
@@ -34,13 +33,13 @@ fun OtpScreen(
         )
     } else {
         systemUiController.setStatusBarColor(
-            color = MaterialTheme.colors.primary
+            color = MaterialTheme.colors.background
         )
     }
 
     val scrollable = rememberScrollState()
     Scaffold(
-        backgroundColor = MaterialTheme.colors.primary,
+        backgroundColor = MaterialTheme.colors.background,
         topBar = { TopAppBar(
             title = {
 
@@ -52,10 +51,11 @@ fun OtpScreen(
                     Icon(painter = painterResource(id = R.drawable.back_arrow),
                         "backIcon",
                     modifier = Modifier
-                        .size(20.dp))
+                        .size(20.dp),
+                    tint = MaterialTheme.colors.primary)
                 }
             },
-            backgroundColor = MaterialTheme.colors.primary,
+            backgroundColor = MaterialTheme.colors.background,
             contentColor = Color.White,
             elevation = 0.dp
         )}
@@ -79,13 +79,13 @@ fun OtpScreen(
                         Text(
                             text = stringResource(id = R.string.verifikasi_title),
                             style = MaterialTheme.typography.h2,
-                            color = MaterialTheme.colors.onSurface
+                            color = MaterialTheme.colors.surface
                         )
 
                         Spacer(modifier = Modifier.weight(1F))
 
                         Image(
-                            painter = painterResource(id = if (darkMode) R.drawable.dark_verifikasi_image else R.drawable.verifikasi_image),
+                            painter = painterResource(id = if (dark) R.drawable.dark_verifikasi_image else R.drawable.verifikasi_image),
                             contentDescription = null,
                             modifier = Modifier
                                 .size(112.dp)
@@ -96,7 +96,7 @@ fun OtpScreen(
                     Text(
                         text = stringResource(id = R.string.verifikasi_desc),
                         style = MaterialTheme.typography.body1,
-                        color = MaterialTheme.colors.onSurface
+                        color = MaterialTheme.colors.surface
                     )
 
                 }
@@ -105,7 +105,7 @@ fun OtpScreen(
 
                 Box {
                     Surface(
-                        color = MaterialTheme.colors.background,
+                        color = MaterialTheme.colors.primary,
                         shape = RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp),
                         modifier = Modifier
                             .fillMaxWidth()

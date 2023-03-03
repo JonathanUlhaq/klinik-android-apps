@@ -23,7 +23,9 @@ import androidx.compose.ui.unit.sp
     value: MutableState<String>,
     label: String,
     icon: Int,
+    modifier:Modifier = Modifier,
     keyboardType:KeyboardType,
+    onDone:() -> Unit = {},
     eventFocus:() -> Unit,
     eventUnFocus:() -> Unit
 ) {
@@ -56,7 +58,7 @@ import androidx.compose.ui.unit.sp
                     .size(16.dp)
             )
         },
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .onFocusEvent {
                 if (it.isFocused) {
@@ -69,6 +71,7 @@ import androidx.compose.ui.unit.sp
         shape = RoundedCornerShape(12.dp),
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
+            onDone.invoke()
         }),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,

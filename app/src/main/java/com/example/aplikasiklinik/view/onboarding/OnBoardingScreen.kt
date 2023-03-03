@@ -8,7 +8,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -30,11 +29,11 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun OnBoardingScreen(
     navController: NavController,
     mainVm:MainActivityViewModel,
+    boolean:Boolean,
     click:(Boolean) -> Unit
 ) {
 
     val systemUiController = rememberSystemUiController()
-    val uiState = mainVm.uiState.collectAsState().value
     systemUiController.setSystemBarsColor(
         color = MaterialTheme.colors.background
     )
@@ -56,7 +55,7 @@ fun OnBoardingScreen(
         R.drawable.dark_onboarding_c
     )
 
-    val listImage = if (uiState.first().darkMode) darkImage else image
+    val listImage = if (boolean) darkImage else image
 
     val title = listOf(
         R.string.title_ob_a,
@@ -103,7 +102,7 @@ fun OnBoardingScreen(
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 PagerDot(3,pagerState.currentPage)
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
                 ButtonClick(color = MaterialTheme.colors.primary, text = stringResource(id = R.string.masuk) ) {
                     click.invoke(false)
                     navController.navigate(Routes.Login.route)

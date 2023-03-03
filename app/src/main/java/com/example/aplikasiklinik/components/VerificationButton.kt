@@ -24,7 +24,8 @@ fun VerificationButton(
     IconButton(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentWidth(Alignment.CenterHorizontally),
+            .wrapContentWidth(Alignment.CenterHorizontally)
+            .padding(bottom = 24.dp),
         onClick = { click.invoke() }) {
         Surface(
             shape = CircleShape,

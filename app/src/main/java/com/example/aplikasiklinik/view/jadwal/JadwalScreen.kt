@@ -120,6 +120,7 @@ fun JadwalScreen(
 
                 Box(
                     modifier = Modifier
+                        .padding(16.dp)
                         .fillMaxWidth()
                         .wrapContentWidth(CenterHorizontally)
                 ) {

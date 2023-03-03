@@ -57,7 +57,7 @@ fun OTPForm(
             imeAction = ImeAction.Done
         ),
         textStyle = MaterialTheme.typography.body1.copy(Color.Black),
-        cursorBrush = SolidColor(MaterialTheme.colors.onSurface),
+        cursorBrush = SolidColor(MaterialTheme.colors.primary),
         decorationBox = {
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -76,11 +76,11 @@ fun OTPForm(
                         modifier = Modifier
                             .clip(RoundedCornerShape(12.dp))
                             .width(60.dp)
-                            .background(MaterialTheme.colors.primary)
+                            .background(MaterialTheme.colors.background)
                             .padding(top = 12.dp, bottom = 12.dp, start = 4.dp, end = 4.dp),
                         style = MaterialTheme.typography.h2,
                         fontSize = 30.sp,
-                        color = Color.White,
+                        color = MaterialTheme.colors.primary,
                         textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.padding(8.dp))

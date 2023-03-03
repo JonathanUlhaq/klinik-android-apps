@@ -10,7 +10,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.aplikasiklinik"
+        applicationId "app.triyolaaccess"
         minSdk 24
         targetSdk 33
         versionCode 1
@@ -49,6 +49,9 @@ android {
 }
 
 dependencies {
+
+//    Kotlin Coil
+    implementation "io.coil-kt:coil-compose:1.4.0"
 
 //    Notification Compat
     implementation("androidx.core:core-ktx:$core_version")

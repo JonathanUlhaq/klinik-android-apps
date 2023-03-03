@@ -29,17 +29,19 @@ class MainActivity : ComponentActivity() {
         setContent {
             val viewModel by viewModels<MainActivityViewModel>()
             val state = viewModel.uiState.collectAsState().value
-
+            var boolean = viewModel.boolean.value
+            boolean = isSystemInDarkTheme()
             AplikasiKlinikTheme(
-                darkTheme = if (state.isEmpty()) false else state.first().darkMode || isSystemInDarkTheme()
+                darkTheme = if (state.isEmpty()) boolean else state.first().darkMode
             ) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen(if (state.isEmpty()) false else state.first().darkMode || isSystemInDarkTheme()) {
-                        viewModel.insertBoolean(ThemeModeModel(0, !state.first().darkMode))
+                    MainScreen(if (state.isEmpty()) boolean else state.first().darkMode) {
+                        viewModel.insertBoolean(if (state.isEmpty()) ThemeModeModel(0,
+                            !boolean ) else ThemeModeModel(0, !state.first().darkMode))
                     }
                 }
             }

@@ -25,11 +25,10 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 fun LoginScreen(
     navController: NavController,
-    mainVm:MainActivityViewModel,
+    dark:Boolean,
     viewModel:LoginViewModel
 ) {
 
-    val darkMode = mainVm.uiState.collectAsState().value.first().darkMode
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
         color = MaterialTheme.colors.background
@@ -65,7 +64,7 @@ fun LoginScreen(
                             Spacer(modifier = Modifier.weight(1F))
 
                             Image(
-                                painter = painterResource(id = if (darkMode) R.drawable.dark_login_image else R.drawable.login_image),
+                                painter = painterResource(id = if (dark) R.drawable.dark_login_image else R.drawable.login_image),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(112.dp)

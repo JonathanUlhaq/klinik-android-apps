@@ -83,3 +83,76 @@ fun DatePicker(
     }
 
 }
+
+
+@Composable
+fun RegistDatePicker(
+    context:Context,
+    date:MutableState<String>,
+    color: Color = Color.White,
+    colorSecond: Color = Color.White,
+    boolean: MutableState<Boolean>,
+    modifier: Modifier = Modifier,
+    action:() -> Unit
+) {
+
+
+
+    val year:Int
+    val month:Int
+    val day:Int
+
+    val calendar = Calendar.getInstance()
+
+    year = calendar.get(Calendar.YEAR)
+    month = calendar.get(Calendar.MONTH)
+    day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    calendar.time = Date()
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _: DatePicker, _: Int, _: Int, _: Int ->
+            date.value = "$day/${month+1}/$year"
+        }, year, month, day
+    )
+
+    if (!boolean.value) {
+        datePickerDialog.show()
+        boolean.value = true
+    }
+    datePickerDialog.setOnDismissListener {
+        action.invoke()
+    }
+    Surface(
+        color = Color.Transparent,
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { if (boolean.value) datePickerDialog.show() },
+        shape = RoundedCornerShape(12.dp),
+        border = BorderStroke(1.dp,color)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(start = 10.dp, end = 10.dp, top = 16.dp, bottom = 16.dp),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Icon(painter = painterResource(id = R.drawable.date_icon_svg),
+                contentDescription = null,
+                tint = color,
+                modifier = Modifier
+                    .size(16.dp))
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Text(
+                text = date.value.ifEmpty { stringResource(id = R.string.tanggal_lahir) },
+                style = MaterialTheme.typography.h1,
+                fontSize = 12.sp,
+                color = colorSecond
+            )
+        }
+    }
+
+}

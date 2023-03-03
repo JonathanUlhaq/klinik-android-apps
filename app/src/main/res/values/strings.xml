@@ -35,7 +35,7 @@
 
 <!--    Menu Antrian-->
     <string name="antrian">Antrian</string>
-    <string name="jam">Jam Masuk</string>
+    <string name="jam">Jadwal Praktik</string>
     <string name="profile">Profile</string>
     <string name="selamat_datang">Selamat Datang,</string>
     <string name="jumlah_antrian">Jumlah Antrian</string>

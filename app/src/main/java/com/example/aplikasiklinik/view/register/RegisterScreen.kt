@@ -1,23 +1,32 @@
 package com.example.aplikasiklinik.view.register
 
+import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.components.VerificationButton
+import com.example.aplikasiklinik.utils.LaunchCamera
 import com.example.aplikasiklinik.view.mainactivity.MainActivityViewModel
 import com.example.aplikasiklinik.view.navigation.Routes
 import com.example.aplikasiklinik.widget.register.RegisForm
@@ -27,19 +36,26 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 fun RegisterScreen(
     navController: NavController,
-    viewModel:RegisterViewModel,
-    mainVm:MainActivityViewModel,
-    login:(Boolean) -> Unit
+    viewModel: RegisterViewModel,
+    mainVm: MainActivityViewModel,
+    dark: Boolean,
+    login: (Boolean) -> Unit
 ) {
-
-    val darkMode = mainVm.uiState.collectAsState().value.first().darkMode
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
         color = MaterialTheme.colors.background
     )
-
-    val scrollable = rememberScrollState()
+    val capturedImagebyUri = remember {
+        mutableStateOf(Uri.EMPTY)
+    }
     val context = LocalContext.current
+    val showPermission = remember {
+        mutableStateOf(false)
+    }
+    if (showPermission.value) {
+        LaunchCamera(capturedImagebyUri)
+    }
+    val scrollable = rememberScrollState()
 
     Scaffold(
         backgroundColor = MaterialTheme.colors.background
@@ -70,7 +86,7 @@ fun RegisterScreen(
                             Spacer(modifier = Modifier.weight(1F))
 
                             Image(
-                                painter = painterResource(id = if (darkMode) R.drawable.dark_register_image else  R.drawable.register_image),
+                                painter = painterResource(id = if (dark) R.drawable.dark_register_image else R.drawable.register_image),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(112.dp)
@@ -86,7 +102,7 @@ fun RegisterScreen(
 
                     }
                 }
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
                 Box {
                     Surface(
@@ -95,53 +111,110 @@ fun RegisterScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxHeight()
-                            .offset(y = 28.dp)
+                            .offset(y = 42.dp)
                     ) {
                         Column(
                             modifier = Modifier
-                                .offset(y = 35.dp)
                                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-                                .verticalScroll(state = scrollable, enabled = true)
-                                .fillMaxHeight()
-                                .wrapContentHeight(CenterVertically),
+                                .offset(y = 60.dp)
                         ) {
-                            RegisForm(viewModel.nik, viewModel.hide, viewModel.name, context, viewModel.date, viewModel.address, viewModel.phone) {
-                                login.invoke(true)
-                                navController.navigate(Routes.Login.route)
-                            }
-                            Spacer(modifier = Modifier.height(8.dp))
-                            VerificationButton {
-                                login.invoke(false)
-                                navController.navigate(Routes.Login.route)
-                            }
-
-                            Spacer(
+                            Box(
                                 modifier = Modifier
-                                    .height(70.dp)
-                                    .imePadding()
-                            )
+                                    .fillMaxWidth()
+                                    .wrapContentWidth(CenterHorizontally)
+                            ) {
+                                Text(
+                                    text = "*Foto potrait dan bagian wajah saja",
+                                    color = MaterialTheme.colors.onSurface,
+                                    style = MaterialTheme.typography.body2
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Column(
+                                modifier = Modifier
+                                    .verticalScroll(state = scrollable, enabled = true)
+                                    .fillMaxHeight()
+                                    .wrapContentHeight(CenterVertically),
+                            ) {
+                                RegisForm(
+                                    viewModel.nik,
+                                    viewModel.hide,
+                                    viewModel.name,
+                                    context,
+                                    viewModel.date,
+                                    viewModel.address,
+                                    viewModel.phone
+                                ) {
+                                    login.invoke(true)
+                                    navController.navigate(Routes.Login.route)
+                                }
+                                Spacer(modifier = Modifier.height(8.dp))
+                                VerificationButton {
+                                    login.invoke(false)
+                                    navController.navigate(Routes.Login.route)
+                                }
 
+                                Spacer(
+                                    modifier = Modifier
+                                        .height(70.dp)
+                                        .imePadding()
+                                )
+
+                            }
                         }
                     }
-
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentSize(Alignment.Center)
+                            .offset(y = (-32).dp)
                     ) {
-                        Surface(
-                            color = Color.White,
-                            border = BorderStroke(5.dp, MaterialTheme.colors.primary),
-                            shape = CircleShape
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.register_icon),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .padding(20.dp)
-                                    .size(30.dp),
-                                tint = MaterialTheme.colors.primary
-                            )
+                        IconButton(onClick = {
+                            showPermission.value = true
+                            if (capturedImagebyUri.value.path?.isNotEmpty() == true) {
+                                capturedImagebyUri.value = Uri.EMPTY
+                            }
+                        }) {
+                            Surface(
+                                color = MaterialTheme.colors.background,
+                                border = BorderStroke(5.dp, MaterialTheme.colors.primary),
+                                shape = CircleShape
+                            ) {
+                                Surface(
+                                    color = MaterialTheme.colors.onBackground,
+                                    shape = CircleShape,
+                                    modifier = Modifier
+                                        .padding(10.dp)
+                                        .size(110.dp)
+                                ) {
+                                    if (capturedImagebyUri.value.path?.isNotEmpty() == true) {
+                                        showPermission.value = false
+                                        Image(
+                                            painter = rememberImagePainter(capturedImagebyUri.value),
+                                            contentDescription = null,
+                                            modifier = Modifier
+                                                .size(110.dp),
+                                            contentScale = ContentScale.Crop
+                                        )
+                                    } else {
+                                        Column(
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .fillMaxHeight(),
+                                            verticalArrangement = Arrangement.Center,
+                                            horizontalAlignment = CenterHorizontally
+                                        ) {
+                                            Text(
+                                                text = "Unggah \n Foto",
+                                                style = MaterialTheme.typography.body2,
+                                                color = MaterialTheme.colors.surface.copy(0.35F),
+                                                textAlign = TextAlign.Center
+                                            )
+                                        }
+                                    }
+
+                                }
+                            }
                         }
                     }
                 }

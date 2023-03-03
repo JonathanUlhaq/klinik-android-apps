@@ -7,8 +7,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -16,7 +22,9 @@ import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.components.DatePicker
 import com.example.aplikasiklinik.components.DisableInput
 import com.example.aplikasiklinik.components.OutlinedTextFields
+import com.example.aplikasiklinik.components.RegistDatePicker
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RegisForm(
     nik: MutableState<String>,
@@ -28,6 +36,19 @@ fun RegisForm(
     phone: MutableState<String>,
     click:() -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val namaFocus = remember {
+        FocusRequester()
+    }
+    val dateBoolean = remember {
+        mutableStateOf(true)
+    }
+    val phoneFocus = remember {
+        FocusRequester()
+    }
+    val alamatFocus = remember {
+        FocusRequester()
+    }
     OutlinedTextFields(
         nik,
         label = stringResource(id = R.string.nik),
@@ -35,7 +56,10 @@ fun RegisForm(
         eventFocus = {
             hide.value = true
         },
-        keyboardType = KeyboardType.NumberPassword
+        keyboardType = KeyboardType.NumberPassword,
+        onDone = {
+            namaFocus.requestFocus()
+        }
     ) {
         hide.value = false
     }
@@ -48,12 +72,20 @@ fun RegisForm(
         eventFocus = {
             hide.value = true
         },
-        keyboardType = KeyboardType.Text
+        keyboardType = KeyboardType.Text,
+        modifier = Modifier
+            .focusRequester(namaFocus),
+        onDone = {
+            dateBoolean.value = false
+            keyboardController?.hide()
+        }
     ) {
         hide.value = false
     }
     Spacer(modifier = Modifier.height(8.dp))
-    DatePicker(context = context, date = date)
+    RegistDatePicker(context = context, date = date, boolean = dateBoolean ) {
+        alamatFocus.requestFocus()
+    }
     Spacer(modifier = Modifier.height(2.dp))
     OutlinedTextFields(
         address,
@@ -62,7 +94,12 @@ fun RegisForm(
         eventFocus = {
             hide.value = true
         },
-        keyboardType = KeyboardType.Text
+        keyboardType = KeyboardType.Text,
+        onDone = {
+            phoneFocus.requestFocus()
+        },
+        modifier = Modifier
+            .focusRequester(alamatFocus)
     ) {
         hide.value = false
     }
@@ -80,7 +117,9 @@ fun RegisForm(
             eventFocus = {
                 hide.value = true
             },
-            keyboardType = KeyboardType.NumberPassword
+            keyboardType = KeyboardType.NumberPassword,
+            modifier = Modifier
+                .focusRequester(phoneFocus)
         ) {
             hide.value = false
         }

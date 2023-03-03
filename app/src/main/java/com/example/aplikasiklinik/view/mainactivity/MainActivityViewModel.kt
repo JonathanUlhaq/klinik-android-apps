@@ -1,5 +1,7 @@
 package com.example.aplikasiklinik.view.mainactivity
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.aplikasiklinik.model.ThemeModeModel
@@ -13,6 +15,7 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(val repo: ThemeRepo):ViewModel() {
     private val _uiState = MutableStateFlow<List<ThemeModeModel>>(emptyList())
     val uiState = _uiState.asStateFlow()
+    val boolean = mutableStateOf(false)
 
     fun getBooleanData() {
         viewModelScope.launch {

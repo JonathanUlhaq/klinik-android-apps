@@ -23,6 +23,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -65,8 +66,9 @@ fun AntrianScreen(
 
     val scrollState = rememberScrollState()
     val state = rememberPagerState()
-    LaunchedEffect(key1 = state.currentPage) {
-        launch {
+    LaunchedEffect(Unit) {
+        while (true){
+            yield()
             delay(3000)
             with(state) {
                 val target = if (currentPage < pageCount - 1) currentPage + 1 else 0
@@ -78,6 +80,8 @@ fun AntrianScreen(
                 animateScrollToPage(page = target)
             }
         }
+
+
     }
 
     Scaffold(

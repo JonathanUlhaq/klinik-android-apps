@@ -89,7 +89,7 @@ fun JadwalScreen(
                             ) {
                                 Surface(
                                     color = MaterialTheme.colors.primary,
-                                    border = BorderStroke(6.dp, MaterialTheme.colors.background),
+                                    border = BorderStroke(3.dp, MaterialTheme.colors.background),
                                     shape = CircleShape
                                 ) {
                                     Icon(painter = painterResource(id = R.drawable.icon_praktik),

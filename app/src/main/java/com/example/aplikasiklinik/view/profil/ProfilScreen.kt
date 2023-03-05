@@ -104,8 +104,8 @@ fun ProfilScreen(
                         Spacer(modifier = Modifier.height(16.dp))
 
                             Surface(
-                                color = Color.White,
-                                border = BorderStroke(5.dp, MaterialTheme.colors.onPrimary),
+                                color = MaterialTheme.colors.onBackground,
+                                border = BorderStroke(3.dp, MaterialTheme.colors.onPrimary),
                                 shape = CircleShape
                             ) {
                                 Surface(

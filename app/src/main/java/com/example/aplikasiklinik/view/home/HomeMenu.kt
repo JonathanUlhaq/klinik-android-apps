@@ -12,12 +12,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.aplikasiklinik.components.BotNavBar
 import com.example.aplikasiklinik.view.navigation.NavigationAdapter
+import com.example.aplikasiklinik.view.navigation.Routes
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeMenu(
     dark: Boolean,
+    route:String = Routes.HomeAntrian.route,
     click: () -> Unit
 ) {
     val navController = rememberAnimatedNavController()
@@ -31,7 +33,7 @@ fun HomeMenu(
                 modifier = Modifier
                     .padding(it)
             ) {
-                NavigationAdapter(dark = dark, navController = navController,
+                NavigationAdapter(dark = dark,route = route, navController = navController,
                     defaultBottom = {
                         bottombarShow.value = it
                     }

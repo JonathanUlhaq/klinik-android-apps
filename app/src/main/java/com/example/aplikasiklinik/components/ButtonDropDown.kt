@@ -22,7 +22,8 @@ import com.example.aplikasiklinik.R
 fun ButtonDropDown(
     dropDown: MutableState<Boolean>,
     poli: MutableState<String>,
-    iconDrop: Int
+    iconDrop: Int,
+    clickValue:() -> Unit
 ) {
 
     val listPoli = listOf(
@@ -88,6 +89,7 @@ fun ButtonDropDown(
                                 .clickable {
                                     poli.value = it
                                     dropDown.value = false
+                                    clickValue.invoke()
                                 }
                         ) {
                             Text(

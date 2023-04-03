@@ -1,6 +1,5 @@
 package com.example.aplikasiklinik.components
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,18 +15,19 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ButtonClick(
     color:Color,
+    textColor:Color = Color.White,
     text:String,
+    modifier: Modifier = Modifier,
     click:()->Unit
 ) {
     Button(
         elevation = ButtonDefaults.elevation(0.dp),
         shape = RoundedCornerShape(20.dp),
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .imePadding(),
         colors = ButtonDefaults.buttonColors(
             backgroundColor =  color,
-            contentColor = Color.White
+            contentColor = textColor
         ),
         onClick = { click.invoke() }) {
         Text(

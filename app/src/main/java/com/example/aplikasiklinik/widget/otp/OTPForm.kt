@@ -26,12 +26,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.aplikasiklinik.utils.networkChecker
 import com.example.aplikasiklinik.view.navigation.Routes
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun OTPForm(
-    navController: NavController,
+    event:()->Unit,
     string: (String) -> Unit
 ) {
     var otpValue by remember {
@@ -39,6 +40,7 @@ fun OTPForm(
     }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = FocusRequester()
+    val context = LocalContext.current
 
     string.invoke(otpValue)
     BasicTextField(
@@ -48,7 +50,11 @@ fun OTPForm(
                 otpValue = it
             }
             if (it.length == 4) {
-                navController.navigate(Routes.Home.route)
+                keyboardController?.hide()
+                if (!networkChecker(context)) {
+                    otpValue = ""
+                }
+                event.invoke()
             }
 
         },

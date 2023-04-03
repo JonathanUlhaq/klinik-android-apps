@@ -1,8 +1,11 @@
 package com.example.aplikasiklinik.widget.register
 
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,7 +17,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -49,19 +54,51 @@ fun RegisForm(
     val alamatFocus = remember {
         FocusRequester()
     }
-    OutlinedTextFields(
-        nik,
-        label = stringResource(id = R.string.nik),
-        R.drawable.nik_icon,
-        eventFocus = {
-            hide.value = true
-        },
-        keyboardType = KeyboardType.NumberPassword,
-        onDone = {
-            namaFocus.requestFocus()
+    val nikValidator = remember {
+        mutableStateOf(false)
+    }
+    val nikFocus = remember { mutableStateOf(false) }
+
+    nikValidator.value = nik.value.length < 16
+
+    Column {
+        OutlinedTextFields(
+            nik,
+            label = stringResource(id = R.string.nik),
+            R.drawable.nik_icon,
+            eventFocus = {
+                hide.value = true
+                nikFocus.value = true
+            },
+            keyboardType = KeyboardType.Number,
+            onDone = {
+                namaFocus.requestFocus()
+            },
+            error = if (nikFocus.value) nikValidator.value else false,
+            isNIK = true,
+            trailingIcon = {
+                AnimatedVisibility(visible = (nik.value.isNotEmpty())) {
+                    IconButton(onClick = { nik.value = "" }) {
+                        Icon(painter = painterResource(id = R.drawable.close_icon),
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier
+                                .size(16.dp)
+                        )
+                    }
+                }
+            }
+        ) {
+            hide.value = false
         }
-    ) {
-        hide.value = false
+        Spacer(modifier = Modifier.height(4.dp))
+        if (nikFocus.value) {
+            AnimatedVisibility(visible = nikValidator.value) {
+                Text(text = "* masukkan NIK 16 digit",
+                    style = MaterialTheme.typography.body1,
+                    color = MaterialTheme.colors.error)
+            }
+        }
     }
     Spacer(modifier = Modifier.height(8.dp))
 
@@ -78,6 +115,18 @@ fun RegisForm(
         onDone = {
             dateBoolean.value = false
             keyboardController?.hide()
+        },
+        trailingIcon = {
+            AnimatedVisibility(visible = (name.value.isNotEmpty())) {
+                IconButton(onClick = { name.value = "" }) {
+                    Icon(painter = painterResource(id = R.drawable.close_icon),
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier
+                            .size(16.dp)
+                    )
+                }
+            }
         }
     ) {
         hide.value = false
@@ -99,7 +148,19 @@ fun RegisForm(
             phoneFocus.requestFocus()
         },
         modifier = Modifier
-            .focusRequester(alamatFocus)
+            .focusRequester(alamatFocus),
+        trailingIcon = {
+            AnimatedVisibility(visible = (address.value.isNotEmpty())) {
+                IconButton(onClick = { address.value = "" }) {
+                    Icon(painter = painterResource(id = R.drawable.close_icon),
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier
+                            .size(16.dp)
+                    )
+                }
+            }
+        }
     ) {
         hide.value = false
     }
@@ -117,9 +178,22 @@ fun RegisForm(
             eventFocus = {
                 hide.value = true
             },
-            keyboardType = KeyboardType.NumberPassword,
+            keyboardType = KeyboardType.Number,
             modifier = Modifier
-                .focusRequester(phoneFocus)
+                .focusRequester(phoneFocus),
+            trailingIcon = {
+                AnimatedVisibility(visible = (phone.value.isNotEmpty())) {
+                    IconButton(onClick = { phone.value = "" }) {
+                        Icon(painter = painterResource(id = R.drawable.close_icon),
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier
+                                .size(16.dp)
+                        )
+                    }
+                }
+            },
+            isPhone = true
         ) {
             hide.value = false
         }

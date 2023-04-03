@@ -13,7 +13,7 @@ import com.example.aplikasiklinik.view.navigation.Routes
 
 
 @Composable
-fun CustomTopBar(navController: NavController, title:String) {
+fun CustomTopBar(navController: NavController, title:String,route:String = Routes.Home.route+"/"+Routes.HomeAntrian.route ) {
     TopAppBar(
         title = {
             Text(
@@ -25,7 +25,7 @@ fun CustomTopBar(navController: NavController, title:String) {
         },
         navigationIcon = {
             IconButton(onClick = {
-                navController.navigate(Routes.Home.route) {
+                navController.navigate(route) {
                     popUpTo(0)
                 }
             }) {

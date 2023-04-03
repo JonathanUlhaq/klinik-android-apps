@@ -3,6 +3,7 @@ package com.example.aplikasiklinik.widget.profil
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -10,12 +11,16 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProfilContent(
     icon: Int,
@@ -23,7 +28,7 @@ fun ProfilContent(
     boolean: Boolean,
     keyboard: KeyboardType
 ) {
-
+    val keyboardOption = LocalSoftwareKeyboardController.current
     OutlinedTextField(value = desc.value,
         onValueChange = { desc.value = it },
         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -43,14 +48,18 @@ fun ProfilContent(
                 painter = painterResource(id = icon),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(16.dp)
             )
         },
         enabled = boolean,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboard),
+        keyboardOptions = KeyboardOptions(keyboardType = keyboard, imeAction = ImeAction.Done),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        keyboardActions = KeyboardActions {
+            keyboardOption?.hide()
+        },
+        singleLine = true
     )
 
 //    Row(

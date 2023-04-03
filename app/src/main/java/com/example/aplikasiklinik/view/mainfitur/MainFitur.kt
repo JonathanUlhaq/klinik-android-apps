@@ -7,9 +7,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.aplikasiklinik.components.BotNavBar
 import com.example.aplikasiklinik.view.navigation.ContentNavigation
-import com.example.aplikasiklinik.view.navigation.NavigationAdapter
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @OptIn(ExperimentalAnimationApi::class)

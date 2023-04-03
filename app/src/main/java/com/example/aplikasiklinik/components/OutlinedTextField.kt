@@ -23,16 +23,28 @@ import androidx.compose.ui.unit.sp
     value: MutableState<String>,
     label: String,
     icon: Int,
+    isNIK:Boolean = false,
+    isPhone:Boolean = false,
     modifier:Modifier = Modifier,
     keyboardType:KeyboardType,
     onDone:() -> Unit = {},
+    error:Boolean = false,
+    trailingIcon:@Composable () -> Unit = {},
     eventFocus:() -> Unit,
     eventUnFocus:() -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
     OutlinedTextField(value = value.value,
-        onValueChange = { value.value = it },
+        onValueChange = {
+            if (isNIK) {
+            if (it.length <= 16) value.value = it.trim()
+            } else if (isPhone) {
+                value.value = it.trim()
+            } else {
+                value.value = it
+            }
+        },
         colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = Color.White,
             backgroundColor = MaterialTheme.colors.primary,
@@ -76,6 +88,10 @@ import androidx.compose.ui.unit.sp
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
             keyboardType = keyboardType),
-        singleLine = true
+        singleLine = true,
+        isError = error,
+        trailingIcon = {
+            trailingIcon.invoke()
+        }
     )
 }

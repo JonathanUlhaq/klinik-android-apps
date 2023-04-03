@@ -23,6 +23,7 @@ import com.google.accompanist.navigation.animation.composable
 @Composable
 fun NavigationAdapter(
     dark:Boolean,
+    route:String = Routes.HomeAntrian.route,
     navController:NavHostController,
     defaultBottom:(Boolean) -> Unit,
     click:() -> Unit
@@ -46,7 +47,7 @@ fun NavigationAdapter(
     }
 
 
-    AnimatedNavHost(navController = navController, startDestination = Routes.HomeAntrian.route ) {
+    AnimatedNavHost(navController = navController, startDestination = route ) {
 
         composable(Routes.HomeAntrian.route,
             enterTransition = {
@@ -83,6 +84,7 @@ fun NavigationAdapter(
             exitTransition = {
                 slideOutOfContainer(towards =  AnimatedContentScope.SlideDirection.Right,tween(300))
             }) {
+            defaultBottom.invoke(true)
             ProfilScreen(navController = navController,dark = dark, viewModel = profileViewModel)
         }
 

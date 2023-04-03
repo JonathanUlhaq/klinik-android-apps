@@ -18,13 +18,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.aplikasiklinik.PagerDot
 import com.example.aplikasiklinik.R
+import com.example.aplikasiklinik.components.BottomConnectionWarning
 import com.example.aplikasiklinik.components.ButtonClick
 import com.example.aplikasiklinik.view.mainactivity.MainActivityViewModel
 import com.example.aplikasiklinik.view.navigation.Routes
 import com.example.aplikasiklinik.widget.onboarding.OnboardingContent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun OnBoardingScreen(
     navController: NavController,
@@ -71,51 +72,56 @@ fun OnBoardingScreen(
 
     val pagerState = rememberPagerState()
 
-    Scaffold(
-        backgroundColor = MaterialTheme.colors.background
-    ) {
-        Surface(
-            color = Color.Transparent,
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
-                .wrapContentSize(Center)
+       Scaffold(
+           backgroundColor = MaterialTheme.colors.background
+       ) {
+           Surface(
+               color = Color.Transparent,
+               modifier = Modifier
+                   .padding(it)
+                   .fillMaxSize()
+                   .wrapContentSize(Center)
 
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(14.dp)
-                    .fillMaxHeight()
-                    .wrapContentHeight(CenterVertically)
-                    .verticalScroll(state),
-                horizontalAlignment = CenterHorizontally,
-            ) {
-                HorizontalPager(
-                    pageCount = image.size,
-                    state = pagerState,
-                    modifier = Modifier) {index ->
-                    OnboardingContent(
-                        title = title[index],
-                        image = listImage[index],
-                        desc = desc[index]
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                PagerDot(3,pagerState.currentPage)
-                Spacer(modifier = Modifier.height(32.dp))
-                ButtonClick(color = MaterialTheme.colors.primary, text = stringResource(id = R.string.masuk) ) {
-                    click.invoke(false)
-                    navController.navigate(Routes.Login.route)
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                ButtonClick(color = MaterialTheme.colors.secondary, text = stringResource(id = R.string.daftar) ) {
-                    click.invoke(true)
-                    navController.navigate(Routes.Register.route)
-                }
-            }
-        }
+           ) {
+               Column(
+                   modifier = Modifier
+                       .padding(14.dp)
+                       .fillMaxHeight()
+                       .wrapContentHeight(CenterVertically)
+                       .verticalScroll(state),
+                   horizontalAlignment = CenterHorizontally,
+               ) {
+                   HorizontalPager(
+                       pageCount = image.size,
+                       state = pagerState,
+                       modifier = Modifier) {index ->
+                       OnboardingContent(
+                           title = title[index],
+                           image = listImage[index],
+                           desc = desc[index]
+                       )
+                   }
+                   Spacer(modifier = Modifier.height(16.dp))
+                   PagerDot(3,pagerState.currentPage)
+                   Spacer(modifier = Modifier.height(32.dp))
+                   ButtonClick(color = MaterialTheme.colors.primary, text = stringResource(id = R.string.masuk),
+                       modifier = Modifier
+                           .fillMaxWidth() ) {
+                       click.invoke(false)
+                       navController.navigate(Routes.Login.route)
+                   }
+                   Spacer(modifier = Modifier.height(8.dp))
+                   ButtonClick(color = MaterialTheme.colors.secondary, text = stringResource(id = R.string.daftar),
+                       modifier = Modifier
+                           .fillMaxWidth() ) {
+                       click.invoke(true)
+                       navController.navigate(Routes.Register.route)
+                   }
+               }
+           }
 
-    }
+       }
+
 
 }
 

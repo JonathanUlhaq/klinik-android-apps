@@ -25,6 +25,7 @@ import coil.compose.rememberImagePainter
 import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.components.DatePicker
 import com.example.aplikasiklinik.components.EditButton
+import com.example.aplikasiklinik.view.navigation.Routes
 import com.example.aplikasiklinik.widget.profil.ProfilContent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -143,7 +144,7 @@ fun ProfilScreen(
                             .wrapContentWidth(Start)
                     ) {
                         EditButton(viewModel.edit.value) {
-                            viewModel.edit.value = !viewModel.edit.value
+                            navController.navigate(Routes.FiturRoute.route+"/"+Routes.DetailProfile.route)
                         }
                     }
 

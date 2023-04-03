@@ -7,9 +7,12 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.example.aplikasiklinik.view.antrianhistory.AntrianHistory
 import com.example.aplikasiklinik.view.currentantrian.CurrentAntrian
 import com.example.aplikasiklinik.view.home.HomeMenu
+import com.example.aplikasiklinik.view.profil.DetailProfile
 import com.example.aplikasiklinik.view.registantrian.RegistAntrian
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -46,17 +49,29 @@ fun ContentNavigation(
             RegistAntrian(navController)
         }
 
-        composable(Routes.Home.route,
+        composable(Routes.Home.route+"/{route}",
             enterTransition = {
                 slideIntoContainer(towards = AnimatedContentScope.SlideDirection.Left, tween(300))
             },
             exitTransition = {
                 fadeOut(tween(700))
-            }) {
-            HomeMenu(dark = dark) {
+            },
+            arguments = listOf(navArgument("route") {
+                NavType.StringType
+            })) {
+            HomeMenu(dark = dark,route = it.arguments?.getString("route")!!) {
                 click.invoke()
             }
         }
+
+        composable( Routes.DetailProfile.route,
+            enterTransition = {
+                fadeIn(tween(700))
+            }) {
+            DetailProfile(navController)
+        }
+
+
 
     }
 }

@@ -21,9 +21,7 @@ import com.example.aplikasiklinik.widget.antrian.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
+import kotlinx.coroutines.*
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -35,15 +33,21 @@ fun AntrianScreen(
 
 //    Nanti dihapus
     val antrian = remember {
-        mutableStateOf(5)
+        mutableStateOf(1)
     }
 
     val context = LocalContext.current
 
-    if (antrian.value == 2 ) {
-        val notif = NotificationManager(context,"Persiapan, antrian kurang ${antrian.value} orang lagi")
-        notif.notificationManager()
-    }
+    LaunchedEffect(key1 = true, block = {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (antrian.value <= 2 ) {
+                val notif = NotificationManager(context,"Persiapan, antrian kurang ${antrian.value} orang lagi")
+                notif.notificationManager()
+            }
+        }
+    } )
+
+
 
     val systemUiController = rememberSystemUiController()
     if(dark){

@@ -10,14 +10,14 @@ import androidx.core.app.NotificationCompat
 import com.example.aplikasiklinik.MainActivity
 import com.example.aplikasiklinik.R
 
-class NotificationManager (val context: Context, val desc:String) {
+class NotificationManager (val context: Context, private val desc:String) {
 
-    val channelId = "FCM100"
-    val channelName = "FCMMessage"
+    private val channelId = "TK100"
+    private val channelName = "TKMessage"
 
-    lateinit var notificationChannel: NotificationChannel
-    lateinit var notificationBuilder:NotificationCompat.Builder
-    val notificationManager = context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private lateinit var notificationChannel: NotificationChannel
+    private lateinit var notificationBuilder:NotificationCompat.Builder
+    private val notificationManager = context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     fun notificationManager() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -35,6 +35,7 @@ class NotificationManager (val context: Context, val desc:String) {
         notificationBuilder.setAutoCancel(true)
         notificationBuilder.setContentIntent(pendingIntent)
         notificationBuilder.setOnlyAlertOnce(true)
-        notificationManager.notify(100,notificationBuilder.build())
+        notificationBuilder.priority = NotificationCompat.PRIORITY_HIGH
+        notificationManager.notify(1,notificationBuilder.build())
     }
 }

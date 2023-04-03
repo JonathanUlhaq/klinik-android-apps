@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.sp
 fun TextArea(
     value: MutableState<String>,
     label: String,
-    eventFocus:() -> Unit,
-    eventUnFocus:() -> Unit
+    modifier:Modifier = Modifier,
+    eventClick:() -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -46,20 +46,15 @@ fun TextArea(
                 fontSize = 12.sp
             )
         },
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .onFocusEvent {
-                if (it.isFocused) {
-                    eventFocus.invoke()
-                } else {
-                    eventUnFocus.invoke()
-                }
-            }
             .imePadding()
         ,
         shape = RoundedCornerShape(12.dp),
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
+            eventClick.invoke()
+
         }),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,

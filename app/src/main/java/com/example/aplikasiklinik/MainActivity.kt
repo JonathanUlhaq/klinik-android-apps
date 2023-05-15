@@ -89,7 +89,11 @@ class MainActivity : ComponentActivity() {
                                         outputDirectory =  output,
                                         executor = cameraExecutor ,
                                         onImageCapture = ::handleImageCapture ,
-                                        onError = {Log.e("GG","ERROR")}
+                                        onError = {Log.e("GG","ERROR")},
+                                        closeCamera = {
+                                            shouldShowCamera.value = false
+                                            cameraExecutor.shutdown()
+                                        }
                                     )
                                 }
                             }) {
@@ -100,6 +104,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
             output = getOutputDirectory()
+            Log.d("GET OUTPUTTT",output.toString())
             cameraExecutor = Executors.newSingleThreadExecutor()
         }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { view, insets ->
@@ -128,7 +133,7 @@ class MainActivity : ComponentActivity() {
     private fun handleImageCapture(uri:Uri) {
         shouldShowCamera.value = false
         photoUri = uri
-        shouldShowPhoto.value = true
+        cameraExecutor.shutdown()
     }
 
     private fun getOutputDirectory():File {
@@ -138,8 +143,4 @@ class MainActivity : ComponentActivity() {
         return if (mediaDir != null && mediaDir.exists()) mediaDir else filesDir
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        cameraExecutor.shutdown()
-    }
 }

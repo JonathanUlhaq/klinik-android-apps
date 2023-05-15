@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -43,6 +44,7 @@ import com.example.aplikasiklinik.R
 fun CameraView(
     outputDirectory: File,
     executor: Executor,
+    closeCamera:() -> Unit,
     onImageCapture: (Uri) -> Unit,
     onError: (ImageCaptureException) -> Unit
 ) {
@@ -85,6 +87,17 @@ fun CameraView(
                     .padding(top = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Start)) {
+                    IconButton(onClick = { closeCamera.invoke() }) {
+                        Icon(painter = painterResource(id = R.drawable.back_arrow),
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(16.dp))
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
                 AndroidView(factory = {previewView},
                     modifier = Modifier
                         .clip(CircleShape)

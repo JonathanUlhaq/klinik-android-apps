@@ -7,6 +7,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -16,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.components.BottomConnectionWarning
+import com.example.aplikasiklinik.utils.CountDownResendOTP
 import com.example.aplikasiklinik.utils.networkChecker
 import com.example.aplikasiklinik.view.mainactivity.MainActivityViewModel
 import com.example.aplikasiklinik.view.navigation.Routes
@@ -157,7 +161,9 @@ fun OtpScreen(
                                 OTPForm(
                                     event = {
                                         if (networkChecker(context)) {
-                                            navController.navigate(Routes.Home.route)
+                                            navController.navigate(Routes.Home.route) {
+                                                popUpTo(0)
+                                            }
                                         } else {
                                             coroutineScope.launch {
                                                 sheetState.show()
@@ -167,6 +173,19 @@ fun OtpScreen(
                                 ) { otpValue ->
                                     viewModel.otpValue.value = otpValue
                                 }
+                                Spacer(
+                                    modifier = Modifier
+                                        .height(14.dp)
+                                )
+                                Box(modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentWidth(CenterHorizontally)) {
+                                    CountDownResendOTP(timer = 30, modifier = Modifier.imePadding())
+                                }
+                                Spacer(
+                                    modifier = Modifier
+                                        .height(14.dp)
+                                )
                                 Spacer(
                                     modifier = Modifier
                                         .height(70.dp)

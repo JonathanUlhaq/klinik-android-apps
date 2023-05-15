@@ -13,7 +13,7 @@
 <!--    Register-->
     <string name="register_title">Daftar Akun</string>
     <string name="register_desc">Yuk daftarkan akunmu agar terdaftar menjadi pasien dan mendapatkan pelayanan digital terbaik dari Klinik Triyola</string>
-    <string name="nik">NIK</string>
+    <string name="nik">Nomor BPJS</string>
     <string name="nama">Nama</string>
     <string name="tanggal_lahir">Tanggal Lahir</string>
     <string name="alamat">Alamat</string>
@@ -27,7 +27,7 @@
 
     <!--    Verifikasi-->
     <string name="verifikasi_title">Verifikasi</string>
-    <string name="verifikasi_desc">Kami mengirimkan code melalui WhatsApp</string>
+    <string name="verifikasi_desc">Kami mengirimkan verifikasi melalui WhatsApp</string>
     <string name="kirim_lagi">Kode tidak terkirim ?</string>
     
     <string name="masuk">Masuk</string>
@@ -39,6 +39,7 @@
     <string name="profile">Profile</string>
     <string name="selamat_datang">Selamat Datang,</string>
     <string name="jumlah_antrian">Jumlah Antrian</string>
+    <string name="sisa_antrian">Sisa Antrian</string>
     <string name="praktik_sekarang">Praktik Sekarang</string>
     <string name="praktik_umum">Praktik Umum</string>
     <string name="antrian_title">Yuk akses fitur antrian untuk mempermudah pelayanan kamu</string>

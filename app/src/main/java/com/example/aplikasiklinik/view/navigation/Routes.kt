@@ -17,5 +17,6 @@ sealed class Routes(val route: String, val icon: Int = 0) {
     object AntrianRegister : Routes("antrian_register")
     object CurrentAntrian : Routes("current_antrian")
     object AntrianHistory : Routes("antrian_history")
+    object MainNavigation:Routes("main_navigation")
 
 }

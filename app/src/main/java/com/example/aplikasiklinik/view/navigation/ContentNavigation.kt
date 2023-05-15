@@ -1,5 +1,6 @@
 package com.example.aplikasiklinik.view.navigation
 
+import android.net.Uri
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -21,8 +22,10 @@ import com.google.accompanist.navigation.animation.composable
 @Composable
 fun ContentNavigation(
     route: String,
+    antrian:Int,
     dark: Boolean,
     click: () -> Unit,
+    uri: Uri,
     navController: NavHostController
 ) {
 
@@ -59,7 +62,7 @@ fun ContentNavigation(
             arguments = listOf(navArgument("route") {
                 NavType.StringType
             })) {
-            HomeMenu(dark = dark,route = it.arguments?.getString("route")!!) {
+            HomeMenu(dark = dark,route = it.arguments?.getString("route")!!, antrian = antrian, uri = uri) {
                 click.invoke()
             }
         }

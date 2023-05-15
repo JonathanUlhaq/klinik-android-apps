@@ -17,8 +17,7 @@ import com.example.aplikasiklinik.R
 @Composable
 fun EditButton(boolean: Boolean,click: () -> Unit) {
 
-    val icons by animateIntAsState(targetValue = if (!boolean) R.drawable.save_icon else R.drawable.edit_icon)
-    val colors by animateColorAsState(targetValue = if (!boolean) MaterialTheme.colors.primary else MaterialTheme.colors.secondary)
+    val colors by animateColorAsState(targetValue = if (!boolean) MaterialTheme.colors.error else MaterialTheme.colors.secondary)
 
     Button(
         onClick = { click.invoke() },
@@ -29,15 +28,15 @@ fun EditButton(boolean: Boolean,click: () -> Unit) {
         shape = RoundedCornerShape(15.dp),
         elevation = ButtonDefaults.elevation(0.dp)
     ) {
-        Icon(
-            painter = painterResource(id = icons),
-            contentDescription = null,
-            modifier = Modifier
-                .size(15.dp)
-        )
+//        Icon(
+//            painter = painterResource(id = icons),
+//            contentDescription = null,
+//            modifier = Modifier
+//                .size(15.dp)
+//        )
         Spacer(modifier = Modifier.width(10.dp))
         Text(
-            text = if (boolean) "Simpan" else "Ubah",
+            text = "Keluar",
             style = MaterialTheme.typography.body2
         )
     }

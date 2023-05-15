@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.aplikasiklinik.R
+import com.example.aplikasiklinik.components.ButtonClick
 import com.example.aplikasiklinik.components.DatePicker
 import com.example.aplikasiklinik.components.EditButton
 import com.example.aplikasiklinik.view.navigation.Routes
@@ -141,10 +143,16 @@ fun ProfilScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .wrapContentWidth(Start)
+                            .wrapContentWidth(End)
                     ) {
                         EditButton(viewModel.edit.value) {
-                            navController.navigate(Routes.FiturRoute.route+"/"+Routes.DetailProfile.route)
+
+                           navController.navigate(Routes.MainNavigation.route+"/"+Routes.Onboarding.route) {
+                               popUpTo(0) {
+                                   inclusive = true
+                               }
+
+                           }
                         }
                     }
 
@@ -180,7 +188,11 @@ fun ProfilScreen(
                         R.drawable.phone_icon, viewModel.phone, viewModel.edit.value,
                         KeyboardType.Phone
                     )
-                    Spacer(modifier = Modifier.height(15.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
+                    ButtonClick(color = MaterialTheme.colors.primary, text = "Ubah", modifier = Modifier.fillMaxWidth() ) {
+                        navController.navigate(Routes.FiturRoute.route+"/"+Routes.DetailProfile.route)
+                    }
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
             }
         }

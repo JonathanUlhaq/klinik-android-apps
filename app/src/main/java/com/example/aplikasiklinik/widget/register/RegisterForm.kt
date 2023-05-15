@@ -2,16 +2,13 @@ package com.example.aplikasiklinik.widget.register
 
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -23,13 +20,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.components.DatePicker
 import com.example.aplikasiklinik.components.DisableInput
 import com.example.aplikasiklinik.components.OutlinedTextFields
 import com.example.aplikasiklinik.components.RegistDatePicker
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun RegisForm(
     nik: MutableState<String>,
@@ -57,49 +55,118 @@ fun RegisForm(
     val nikValidator = remember {
         mutableStateOf(false)
     }
+
+    val pasienSelected = remember {
+        mutableStateOf(false)
+    }
+
+    val currentSelected = remember {
+        mutableStateOf(0)
+    }
+
+    val listJenisPasien = listOf(
+        "Pasien Non BPJS",
+        "Pasien BPJS"
+    )
+
     val nikFocus = remember { mutableStateOf(false) }
 
     nikValidator.value = nik.value.length < 16
 
     Column {
-        OutlinedTextFields(
-            nik,
-            label = stringResource(id = R.string.nik),
-            R.drawable.nik_icon,
-            eventFocus = {
-                hide.value = true
-                nikFocus.value = true
-            },
-            keyboardType = KeyboardType.Number,
-            onDone = {
-                namaFocus.requestFocus()
-            },
-            error = if (nikFocus.value) nikValidator.value else false,
-            isNIK = true,
-            trailingIcon = {
-                AnimatedVisibility(visible = (nik.value.isNotEmpty())) {
-                    IconButton(onClick = { nik.value = "" }) {
-                        Icon(painter = painterResource(id = R.drawable.close_icon),
-                            contentDescription = null,
-                            tint = Color.White,
+
+        Text(text = "Jenis Pasien",
+            style = MaterialTheme.typography.h1,
+            color = Color.White,
+            fontSize = 12.sp)
+        Spacer(modifier = Modifier.height(8.dp))
+        Surface(
+            color = Color.Transparent,
+            border = BorderStroke(2.dp, Color.White),
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier
+                .height(38.dp)
+                .width(210.dp)
+        ) {
+            Row(
+                Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                listJenisPasien.forEachIndexed {index,string ->
+                    pasienSelected.value = index == currentSelected.value
+                    val colorFont by animateColorAsState(targetValue = if (pasienSelected.value) MaterialTheme.colors.primary else Color.White.copy(0.5f))
+                    val colorSurface by animateColorAsState(targetValue = if (pasienSelected.value) Color.White else Color.Transparent)
+                    Surface(
+                        color = colorSurface,
+                        shape = RoundedCornerShape(12.dp),
+                        onClick = {
+                            currentSelected.value = index
+                        },
+                        modifier = Modifier
+                            .fillMaxHeight()
+                    ) {
+                        Text(string,
+                            fontSize = 12.sp,
+                            color = colorFont,
+                            style = MaterialTheme.typography.h1,
                             modifier = Modifier
-                                .size(16.dp)
-                        )
+                                .padding(12.dp))
                     }
+
                 }
             }
-        ) {
-            hide.value = false
         }
         Spacer(modifier = Modifier.height(4.dp))
-        if (nikFocus.value) {
-            AnimatedVisibility(visible = nikValidator.value) {
-                Text(text = "* masukkan NIK 16 digit",
-                    style = MaterialTheme.typography.body1,
-                    color = MaterialTheme.colors.error)
-            }
-        }
-    }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "Form Data Diri",
+            style = MaterialTheme.typography.h1,
+            color = Color.White,
+            fontSize = 12.sp)
+      AnimatedVisibility(visible = currentSelected.value == 1 ) {
+          Column {
+              Spacer(modifier = Modifier.height(4.dp))
+              OutlinedTextFields(
+                  nik,
+                  label = stringResource(id = R.string.nik),
+                  R.drawable.nik_icon,
+                  eventFocus = {
+                      hide.value = true
+                      nikFocus.value = true
+                  },
+                  keyboardType = KeyboardType.Number,
+                  onDone = {
+                      namaFocus.requestFocus()
+                  },
+                  error = if (nikFocus.value) nikValidator.value else false,
+                  isNIK = true,
+                  trailingIcon = {
+                      AnimatedVisibility(visible = (nik.value.isNotEmpty())) {
+                          IconButton(onClick = { nik.value = "" }) {
+                              Icon(painter = painterResource(id = R.drawable.close_icon),
+                                  contentDescription = null,
+                                  tint = Color.White,
+                                  modifier = Modifier
+                                      .size(16.dp)
+                              )
+                          }
+                      }
+                  }
+              ) {
+                  hide.value = false
+              }
+              Spacer(modifier = Modifier.height(4.dp))
+              if (nikFocus.value) {
+                  AnimatedVisibility(visible = nikValidator.value) {
+                      Text(text = "* masukkan NIK 16 digit",
+                          style = MaterialTheme.typography.body1,
+                          color = MaterialTheme.colors.error)
+                  }
+              }
+          }
+      }
+
+
     Spacer(modifier = Modifier.height(8.dp))
 
     OutlinedTextFields(
@@ -213,5 +280,6 @@ fun RegisForm(
             style = MaterialTheme.typography.body2,
             modifier = Modifier
                 .clickable { click.invoke() })
+    }
     }
 }

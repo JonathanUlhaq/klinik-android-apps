@@ -1,5 +1,6 @@
 package com.example.aplikasiklinik.view.navigation
 
+import android.net.Uri
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -13,6 +14,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.aplikasiklinik.view.antrian.AntrianScreen
 import com.example.aplikasiklinik.view.jadwal.JadwalScreen
+import com.example.aplikasiklinik.view.main.MainScreen
 import com.example.aplikasiklinik.view.mainfitur.MainFitur
 import com.example.aplikasiklinik.view.profil.ProfilScreen
 import com.example.aplikasiklinik.view.profil.ProfilViewModel
@@ -23,9 +25,11 @@ import com.google.accompanist.navigation.animation.composable
 @Composable
 fun NavigationAdapter(
     dark:Boolean,
+    antrian:Int,
     route:String = Routes.HomeAntrian.route,
     navController:NavHostController,
     defaultBottom:(Boolean) -> Unit,
+    uri: Uri,
     click:() -> Unit
 ) {
 
@@ -59,6 +63,7 @@ fun NavigationAdapter(
             defaultBottom.invoke(true)
             AntrianScreen(
                 dark,
+                antrian,
                 navController
             ) {
                 click.invoke()
@@ -99,7 +104,19 @@ fun NavigationAdapter(
             defaultBottom.invoke(false)
             MainFitur(it.arguments?.getString("route")!!,dark = dark, click = {
                 click.invoke()
+            }, antrian = antrian, uri = uri)
+        }
+
+        composable(Routes.MainNavigation.route+"/{route}",
+            enterTransition = {
+                fadeIn(tween(700))
+            },
+            arguments = listOf(navArgument("route") {
+                NavType.StringType
             })
+        ) {
+            defaultBottom.invoke(false)
+            MainScreen(dark = dark, antrian = antrian, startDest = it.arguments?.getString("route")!!, cameraClick = {}, uri = uri  ) {}
         }
 
     }

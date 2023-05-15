@@ -1,5 +1,6 @@
 package com.example.aplikasiklinik.view.home
 
+import android.net.Uri
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -19,7 +20,9 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 @Composable
 fun HomeMenu(
     dark: Boolean,
+    antrian:Int,
     route:String = Routes.HomeAntrian.route,
+    uri: Uri,
     click: () -> Unit
 ) {
     val navController = rememberAnimatedNavController()
@@ -36,7 +39,9 @@ fun HomeMenu(
                 NavigationAdapter(dark = dark,route = route, navController = navController,
                     defaultBottom = {
                         bottombarShow.value = it
-                    }
+                    },
+                    antrian = antrian,
+                    uri = uri
                 ) {
                     click.invoke()
                 }

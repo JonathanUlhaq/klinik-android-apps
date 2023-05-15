@@ -1,6 +1,7 @@
 package com.example.aplikasiklinik.view.navigation
 
 
+import android.net.Uri
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -27,7 +28,13 @@ import com.google.accompanist.navigation.animation.composable
 @Composable
 fun MainNavigation(
     dark:Boolean,
+    startDest:String = Routes.Splash.route,
+    antrian:Int,
     navMain:NavHostController,
+    cameraClick:() -> Unit,
+    uri: Uri,
+    openCam:Boolean,
+    contentCamera:@Composable () -> Unit = {},
     click:()->Unit
 ) {
 
@@ -45,7 +52,7 @@ fun MainNavigation(
         mutableStateOf(false)
     }
 
-    AnimatedNavHost(navController = navMain, startDestination = Routes.Splash.route ) {
+    AnimatedNavHost(navController = navMain, startDestination = startDest ) {
         composable(Routes.Splash.route,
             enterTransition = {
                 fadeIn(tween(300))
@@ -76,7 +83,7 @@ fun MainNavigation(
             exitTransition = {
                 slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Down else AnimatedContentScope.SlideDirection.Right,tween(300))
             }) {
-            RegisterScreen(navMain,regViewModel,mainVm,dark) {
+            RegisterScreen(navMain,regViewModel,mainVm,dark, cameraClick = {cameraClick.invoke()}, uri = uri, contentCamera = contentCamera, openCam = openCam) {
                 login.value = it
             }
         }
@@ -109,7 +116,7 @@ fun MainNavigation(
             exitTransition = {
                 slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Left,tween(300))
             }) {
-           HomeMenu(dark = dark ) {
+           HomeMenu(dark = dark,antrian, uri = uri ) {
                click.invoke()
            }
         }

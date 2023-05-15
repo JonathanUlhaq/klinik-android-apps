@@ -74,7 +74,7 @@ fun WidgetInformation(
                         .wrapContentWidth(Alignment.CenterHorizontally)
                 ) {
                     Text(
-                        text = stringResource(R.string.jumlah_antrian),
+                        text = stringResource(R.string.sisa_antrian),
                         style = MaterialTheme.typography.body1,
                         fontSize = 14.sp,
                         color = MaterialTheme.colors.onSurface

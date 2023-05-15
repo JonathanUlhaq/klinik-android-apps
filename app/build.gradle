@@ -50,6 +50,14 @@ android {
 
 dependencies {
 
+//    Camera X
+    def camerax_version = "1.0.1"
+    implementation "androidx.camera:camera-core:$camerax_version"
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    implementation "androidx.camera:camera-view:1.0.0-alpha31"
+    implementation "androidx.compose.foundation:foundation:1.0.0"
+
     // For Robolectric tests.
     testImplementation("com.google.dagger:hilt-android-testing:2.44")
     // ...with Kotlin.

@@ -27,13 +27,14 @@ import kotlinx.coroutines.*
 @Composable
 fun AntrianScreen(
     dark: Boolean,
+    antiran:Int,
     navController: NavController,
     click: () -> Unit
 ) {
 
 //    Nanti dihapus
     val antrian = remember {
-        mutableStateOf(1)
+        mutableStateOf(antiran)
     }
 
     val context = LocalContext.current

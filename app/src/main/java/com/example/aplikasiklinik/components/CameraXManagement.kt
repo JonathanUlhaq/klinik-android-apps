@@ -1,8 +1,13 @@
 package com.example.aplikasiklinik.components
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -16,9 +21,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.Start
@@ -39,6 +42,7 @@ import java.util.concurrent.Executor
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import com.example.aplikasiklinik.R
+import kotlinx.coroutines.launch
 
 @Composable
 fun CameraView(
@@ -171,4 +175,47 @@ private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
             }, ContextCompat.getMainExecutor(this))
         }
     }
+
+
+@Composable
+fun requestCameraPermission(
+    context: Context,
+    openCamera: MutableState<Boolean>
+) {
+    val coroutine = rememberCoroutineScope()
+    val permission = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = {
+            if (it) {
+                Toast.makeText(context, "Akses kamera diizinkan", Toast.LENGTH_SHORT).show()
+                coroutine.launch {
+                    openCamera.value = true
+                }
+            } else {
+                Toast.makeText(context, "Akses kamera tidak diizinkan", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    val permissionCheckResult =
+        ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+    if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+        Toast.makeText(context, "Akses kamera diizinkan", Toast.LENGTH_SHORT).show()
+        SideEffect {
+            openCamera.value = true
+        }
+    } else {
+        Toast.makeText(context, "Akses kamera tidak diizinkan", Toast.LENGTH_SHORT).show()
+        SideEffect {
+            permission.launch(Manifest.permission.CAMERA)
+        }
+
+    }
+}
+
+fun getOutputDirectory(context: Context):File {
+    val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
+        File(it,context.resources.getString(R.string.app_name)).apply { mkdirs() }
+    }
+    return if (mediaDir != null && mediaDir.exists()) mediaDir else context.filesDir
+}
 

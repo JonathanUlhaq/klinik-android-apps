@@ -29,10 +29,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.aplikasiklinik.R
-import com.example.aplikasiklinik.components.ButtonClick
-import com.example.aplikasiklinik.components.CameraView
-import com.example.aplikasiklinik.components.CustomTopBar
-import com.example.aplikasiklinik.components.DatePicker
+import com.example.aplikasiklinik.components.*
 import com.example.aplikasiklinik.utils.LaunchCamera
 import com.example.aplikasiklinik.utils.createImageFile
 import com.example.aplikasiklinik.view.navigation.Routes
@@ -47,7 +44,7 @@ import java.util.concurrent.Executors
 fun DetailProfile(navController: NavController) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
-        color = MaterialTheme.colors.background
+        color = MaterialTheme.colors.primary
     )
     val scrollState = rememberScrollState()
     val nik = remember {
@@ -238,46 +235,4 @@ fun DetailProfile(navController: NavController) {
             }
         }
     }
-}
-
-@Composable
-fun requestCameraPermission(
-    context: Context,
-    openCamera: MutableState<Boolean>
-) {
-    val coroutine = rememberCoroutineScope()
-    val permission = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = {
-            if (it) {
-                Toast.makeText(context, "Akses kamera diizinkan", Toast.LENGTH_SHORT).show()
-                coroutine.launch {
-                    openCamera.value = true
-                }
-            } else {
-                Toast.makeText(context, "Akses kamera tidak diizinkan", Toast.LENGTH_SHORT).show()
-            }
-        })
-
-    val permissionCheckResult =
-        ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-    if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-        Toast.makeText(context, "Akses kamera diizinkan", Toast.LENGTH_SHORT).show()
-        SideEffect {
-            openCamera.value = true
-        }
-    } else {
-        Toast.makeText(context, "Akses kamera tidak diizinkan", Toast.LENGTH_SHORT).show()
-        SideEffect {
-            permission.launch(Manifest.permission.CAMERA)
-        }
-
-    }
-}
-
-private fun getOutputDirectory(context: Context):File {
-    val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
-        File(it,context.resources.getString(R.string.app_name)).apply { mkdirs() }
-    }
-    return if (mediaDir != null && mediaDir.exists()) mediaDir else context.filesDir
 }

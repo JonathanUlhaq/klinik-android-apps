@@ -6,6 +6,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -14,12 +16,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.aplikasiklinik.R
+import com.example.aplikasiklinik.model.currentantrian.AntriSekarangResponse
 
 @Composable
 fun WidgetInformation(
-    antrian:Int,
-    click:() -> Unit
+    antrian: AntriSekarangResponse
 ) {
+    val antrianKurang = remember {
+        mutableStateOf(0)
+    }
     Row {
         Surface(
             color = MaterialTheme.colors.primary,
@@ -27,7 +32,7 @@ fun WidgetInformation(
             modifier = Modifier
                 .width(160.dp)
                 .height(150.dp)
-                .clickable { click.invoke() }
+
 
         ) {
             Column(
@@ -50,18 +55,23 @@ fun WidgetInformation(
                         )
                     }
 
-                    Box(
-                        modifier = Modifier
-                            .offset(y = 20.dp)
-                            .fillMaxWidth()
-                            .wrapContentWidth(Alignment.End)
-                    ) {
-                        Text(
-                            text = "$antrian",
-                            style = MaterialTheme.typography.h1,
-                            fontSize = 44.sp,
-                            color = MaterialTheme.colors.onSurface
-                        )
+                    if (antrian.kurang_antrian != null) {
+                        antrianKurang.value = antrian.kurang_antrian
+                        if( antrianKurang.value >= 1) {
+                            Box(
+                                modifier = Modifier
+                                    .offset(y = 20.dp)
+                                    .fillMaxWidth()
+                                    .wrapContentWidth(Alignment.End)
+                            ) {
+                                Text(
+                                    text =  antrianKurang.value.toString(),
+                                    style = MaterialTheme.typography.h1,
+                                    fontSize = 44.sp,
+                                    color = MaterialTheme.colors.onSurface
+                                )
+                            }
+                        }
                     }
 
                 }
@@ -74,7 +84,16 @@ fun WidgetInformation(
                         .wrapContentWidth(Alignment.CenterHorizontally)
                 ) {
                     Text(
-                        text = stringResource(R.string.sisa_antrian),
+                        text = if (antrian.kurang_antrian != null) {
+                            if (antrian.kurang_antrian < 1) {
+                                "Yuk segera persiapan, giliran kamu !"
+                            } else {
+                                stringResource(R.string.sisa_antrian)
+                            }
+
+                        } else {
+                            "Belum mendaftar antrian"
+                        },
                         style = MaterialTheme.typography.body1,
                         fontSize = 14.sp,
                         color = MaterialTheme.colors.onSurface

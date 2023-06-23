@@ -112,8 +112,8 @@ fun RegistDatePicker(
 
     val datePickerDialog = DatePickerDialog(
         context,
-        { _: DatePicker, _: Int, _: Int, _: Int ->
-            date.value = "$day/${month+1}/$year"
+        { _: DatePicker, years: Int, months: Int, days: Int ->
+            date.value = "$days/${months+1}/$years"
         }, year, month, day
     )
 

@@ -1,5 +1,6 @@
 package com.example.aplikasiklinik.widget.otp
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,19 +43,21 @@ fun OTPForm(
     val focusRequester = FocusRequester()
     val context = LocalContext.current
 
-    string.invoke(otpValue)
+
     BasicTextField(
         value = otpValue,
         onValueChange = {
             if (it.length <= 4) {
                 otpValue = it
+                string.invoke(otpValue)
             }
-            if (it.length == 4) {
+            if (it.length >= 4) {
                 keyboardController?.hide()
+                event.invoke()
                 if (!networkChecker(context)) {
                     otpValue = ""
                 }
-                event.invoke()
+            Log.d("OTPNYA MAS ",otpValue)
             }
 
         },

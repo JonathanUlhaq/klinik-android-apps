@@ -32,15 +32,13 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.aplikasiklinik.R
-import com.example.aplikasiklinik.components.CameraView
-import com.example.aplikasiklinik.components.VerificationButton
-import com.example.aplikasiklinik.components.getOutputDirectory
-import com.example.aplikasiklinik.components.requestCameraPermission
+import com.example.aplikasiklinik.components.*
 import com.example.aplikasiklinik.utils.LaunchCamera
+import com.example.aplikasiklinik.view.login.LoginViewModel
 import com.example.aplikasiklinik.view.mainactivity.MainActivityViewModel
 import com.example.aplikasiklinik.view.navigation.Routes
 import com.example.aplikasiklinik.widget.register.RegisForm
-import com.example.aplikasiklinik.widget.register.RegisterViewModel
+import com.example.aplikasiklinik.view.register.RegisterViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 import java.io.File
@@ -52,6 +50,7 @@ fun RegisterScreen(
     navController: NavController,
     viewModel: RegisterViewModel,
     mainVm: MainActivityViewModel,
+    loginVm:LoginViewModel,
     dark: Boolean,
     cameraClick:() -> Unit,
     uri:Uri,
@@ -65,6 +64,38 @@ fun RegisterScreen(
         color = MaterialTheme.colors.background
     )
     val context = LocalContext.current
+
+    val nik = remember {
+        mutableStateOf("")
+    }
+    val name = remember {
+        mutableStateOf("")
+    }
+    val address = remember {
+        mutableStateOf("")
+    }
+    val phone = remember {
+        mutableStateOf("")
+    }
+    val date = remember {
+        mutableStateOf("")
+    }
+    val hide = remember {
+        mutableStateOf(false)
+    }
+
+    val isLoading = remember {
+        mutableStateOf(false)
+    }
+
+    val detectFirst = remember {
+        mutableStateOf(false)
+    }
+
+    val isError = remember {
+        mutableStateOf(false)
+    }
+
     val capturedImagebyUri = remember {
         mutableStateOf(Uri.EMPTY)
     }
@@ -83,6 +114,7 @@ fun RegisterScreen(
     val cameraExecutor = Executors.newSingleThreadExecutor()
     val scrollable = rememberScrollState()
 
+    LoadingScreen(boolean = isLoading.value)
     if (openCamera.value) {
         CameraView(outputDirectory = output, executor = cameraExecutor,
             onImageCapture = {
@@ -112,7 +144,7 @@ fun RegisterScreen(
                     if (openCam) {
                         contentCamera.invoke()
                     } else {
-                        AnimatedVisibility(visible = !viewModel.hide.value) {
+                        AnimatedVisibility(visible = !hide.value) {
                             Column(
                                 modifier = Modifier
                                     .padding(start = 14.dp, end = 14.dp, top = 14.dp)
@@ -171,13 +203,15 @@ fun RegisterScreen(
                                             .wrapContentHeight(CenterVertically),
                                     ) {
                                         RegisForm(
-                                            viewModel.nik,
-                                            viewModel.hide,
-                                            viewModel.name,
+                                            nik,
+                                            hide,
+                                            name,
                                             context,
-                                            viewModel.date,
-                                            viewModel.address,
-                                            viewModel.phone
+                                            date,
+                                            address,
+                                            phone,
+                                            isError,
+                                            detectFirst
                                         ) {
                                             login.invoke(true)
                                             navController.navigate(Routes.Login.route)
@@ -185,7 +219,21 @@ fun RegisterScreen(
                                         Spacer(modifier = Modifier.height(8.dp))
                                         VerificationButton {
                                             login.invoke(false)
-                                            navController.navigate(Routes.Otp.route)
+                                            if (!detectFirst.value) {
+                                                viewModel.registerAkun(
+                                                    nama = name.value,
+                                                    telepon = phone.value,
+                                                    alamat = address.value,
+                                                    tanggal_lahir = date.value,
+                                                    isError = isError,
+                                                    password = "12345678",
+                                                    no_bpjs = nik.value,
+                                                    isLoading = isLoading
+                                                ){
+                                                    loginVm.getOtp(otp =phone.value){}
+                                                    navController.navigate(Routes.Otp.route)
+                                                }
+                                            }
                                         }
 
                                         Spacer(

@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,13 +19,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.aplikasiklinik.R
+import com.example.aplikasiklinik.view.login.LoginViewModel
 import com.example.aplikasiklinik.view.navigation.Routes
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
-    navController:NavController
+    navController:NavController,
+    vm:LoginViewModel
 ) {
 
     val systemUiController = rememberSystemUiController()
@@ -47,6 +50,12 @@ fun SplashScreen(
     val scaleIcon = remember {
         Animatable(10F)
     }
+    
+    val noLogin = remember {
+        mutableStateOf(false)
+    }
+
+    noLogin.value = vm.getToken().isNullOrEmpty()
 
     LaunchedEffect(key1 = true, block = {
         scaleIcon.animateTo(targetValue = 70F,
@@ -67,8 +76,14 @@ fun SplashScreen(
             )
         )
         delay(200)
-        navController.navigate(Routes.Onboarding.route) {
-            popUpTo(0)
+        if (noLogin.value) {
+            navController.navigate(Routes.Onboarding.route) {
+                popUpTo(0)
+            }
+        } else {
+            navController.navigate(Routes.Home.route) {
+                popUpTo(0)
+            }
         }
     } )
 

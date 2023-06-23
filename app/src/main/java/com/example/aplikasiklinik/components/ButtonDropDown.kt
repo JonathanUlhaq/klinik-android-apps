@@ -56,7 +56,7 @@ fun ButtonDropDown(
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = poli.value,
+                        text = if (poli.value.isNotEmpty()) poli.value else "Pilih Poli",
                         style = MaterialTheme.typography.h1,
                         fontSize = 12.sp,
                     )

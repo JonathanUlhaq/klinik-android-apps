@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.sp
     keyboardType:KeyboardType,
     onDone:() -> Unit = {},
     error:Boolean = false,
+    visualTransforimation:VisualTransformation = VisualTransformation.None,
     trailingIcon:@Composable () -> Unit = {},
     eventFocus:() -> Unit,
     eventUnFocus:() -> Unit
@@ -40,7 +42,7 @@ import androidx.compose.ui.unit.sp
             if (isNIK) {
             if (it.length <= 16) value.value = it.trim()
             } else if (isPhone) {
-                value.value = it.trim()
+                if (it.length <= 12) value.value = it.trim()
             } else {
                 value.value = it
             }
@@ -92,6 +94,7 @@ import androidx.compose.ui.unit.sp
         isError = error,
         trailingIcon = {
             trailingIcon.invoke()
-        }
+        },
+        visualTransformation = visualTransforimation
     )
 }

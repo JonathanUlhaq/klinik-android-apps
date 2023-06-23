@@ -26,6 +26,7 @@ import com.example.aplikasiklinik.components.DatePicker
 import com.example.aplikasiklinik.components.DisableInput
 import com.example.aplikasiklinik.components.OutlinedTextFields
 import com.example.aplikasiklinik.components.RegistDatePicker
+import com.example.aplikasiklinik.view.register.RegisterViewModel
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -37,6 +38,8 @@ fun RegisForm(
     date: MutableState<String>,
     address: MutableState<String>,
     phone: MutableState<String>,
+    isError:MutableState<Boolean>,
+    detectFirst:MutableState<Boolean>,
     click:() -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -68,6 +71,17 @@ fun RegisForm(
         "Pasien Non BPJS",
         "Pasien BPJS"
     )
+
+    val firstString = remember {
+        mutableStateOf("")
+    }
+
+
+
+    if (phone.value.isNotEmpty()) {
+        firstString.value = phone.value.first().toString()
+        detectFirst.value = firstString.value == "0"
+    }
 
     val nikFocus = remember { mutableStateOf(false) }
 
@@ -158,7 +172,7 @@ fun RegisForm(
               Spacer(modifier = Modifier.height(4.dp))
               if (nikFocus.value) {
                   AnimatedVisibility(visible = nikValidator.value) {
-                      Text(text = "* masukkan NIK 16 digit",
+                      Text(text = "* masukkan Nomor BPJS 13 digit",
                           style = MaterialTheme.typography.body1,
                           color = MaterialTheme.colors.error)
                   }
@@ -246,12 +260,11 @@ fun RegisForm(
                 hide.value = true
             },
             keyboardType = KeyboardType.Number,
-            modifier = Modifier
-                .focusRequester(phoneFocus),
             trailingIcon = {
                 AnimatedVisibility(visible = (phone.value.isNotEmpty())) {
                     IconButton(onClick = { phone.value = "" }) {
-                        Icon(painter = painterResource(id = R.drawable.close_icon),
+                        Icon(
+                            painter = painterResource(id = R.drawable.close_icon),
                             contentDescription = null,
                             tint = Color.White,
                             modifier = Modifier
@@ -260,11 +273,38 @@ fun RegisForm(
                     }
                 }
             },
-            isPhone = true
+            isPhone = true,
+            modifier = Modifier
+                .focusRequester(phoneFocus)
         ) {
             hide.value = false
         }
     }
+        Spacer(modifier = Modifier.height(2.dp))
+        AnimatedVisibility(visible = isError.value) {
+            Text(
+                "* Cek dan lengkapi semua form isian",
+                fontSize = 12.sp,
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption
+            )
+        }
+        AnimatedVisibility(visible = detectFirst.value) {
+            Text(
+                "* Isiikan nomor telepon setelah angka 0",
+                fontSize = 12.sp,
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption
+            )
+        }
+        AnimatedVisibility(visible = phone.value.length < 10 && phone.value.isNotEmpty()) {
+            Text(
+                "* Isiikan nomor telepon minimal 10 digit",
+                fontSize = 12.sp,
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption
+            )
+        }
     Spacer(modifier = Modifier.height(8.dp))
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -279,7 +319,10 @@ fun RegisForm(
             color = MaterialTheme.colors.surface.copy(0.7F),
             style = MaterialTheme.typography.body2,
             modifier = Modifier
-                .clickable { click.invoke() })
+                .clickable {
+                    click.invoke()
+
+                })
     }
     }
 }

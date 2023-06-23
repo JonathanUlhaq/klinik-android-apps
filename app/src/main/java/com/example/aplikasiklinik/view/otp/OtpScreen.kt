@@ -1,5 +1,6 @@
 package com.example.aplikasiklinik.view.otp
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -16,9 +17,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.components.BottomConnectionWarning
+import com.example.aplikasiklinik.components.LoadingScreen
+import com.example.aplikasiklinik.model.LoginSaver
 import com.example.aplikasiklinik.utils.CountDownResendOTP
 import com.example.aplikasiklinik.utils.networkChecker
 import com.example.aplikasiklinik.view.mainactivity.MainActivityViewModel
@@ -36,6 +40,18 @@ fun OtpScreen(
     viewModel: OTPViewModel
 ) {
 
+    val otpValues = remember {
+        mutableStateOf("")
+    }
+
+    val isError = remember {
+        mutableStateOf(false)
+    }
+
+    val isLoading = remember {
+        mutableStateOf(false)
+    }
+
     val systemUiController = rememberSystemUiController()
     if (dark) {
         systemUiController.setStatusBarColor(
@@ -51,6 +67,8 @@ fun OtpScreen(
         confirmStateChange = { false })
     val coroutineScope = rememberCoroutineScope()
     val scrollable = rememberScrollState()
+
+    LoadingScreen(boolean = isLoading.value)
 
     ModalBottomSheetLayout(
         sheetContent = {
@@ -161,9 +179,36 @@ fun OtpScreen(
                                 OTPForm(
                                     event = {
                                         if (networkChecker(context)) {
-                                            navController.navigate(Routes.Home.route) {
-                                                popUpTo(0)
+                                            if (otpValues.value.isNotEmpty()) {
+                                                viewModel.loginPasien(
+                                                    isError,
+                                                    isLoading,
+                                                    otpValues.value.trim()
+                                                ) { user, token ->
+                                                    if (user != null) {
+                                                        viewModel.addLoginStatus(
+                                                            LoginSaver(
+                                                                id = 0,
+                                                                name = user.name!!,
+                                                                telepon = user.telepon!!,
+                                                                alamat = user.alamat!!,
+                                                                jenis_kelamin = "",
+                                                                foto = "",
+                                                                no_bpjs = "",
+                                                                tanggal_lahir = user.tanggal_lahir!!
+                                                            )
+                                                        )
+                                                        viewModel.addToken(token!!)
+                                                        navController.navigate(Routes.Home.route) {
+                                                            popUpTo(0)
+                                                        }
+                                                    }
+
+                                                }
+                                            } else {
+                                                isError.value = true
                                             }
+
                                         } else {
                                             coroutineScope.launch {
                                                 sheetState.show()
@@ -171,7 +216,17 @@ fun OtpScreen(
                                         }
                                     }
                                 ) { otpValue ->
-                                    viewModel.otpValue.value = otpValue
+                                    otpValues.value = otpValue
+                                }
+                                Spacer(
+                                    modifier = Modifier
+                                        .height(2.dp)
+                                )
+                                AnimatedVisibility(visible = isError.value) {
+                                    Text(text = " Oops OTP kamu salah",
+                                        style = MaterialTheme.typography.caption,
+                                        color = Color.White,
+                                        fontSize = 10.sp)
                                 }
                                 Spacer(
                                     modifier = Modifier
@@ -180,7 +235,7 @@ fun OtpScreen(
                                 Box(modifier = Modifier
                                     .fillMaxWidth()
                                     .wrapContentWidth(CenterHorizontally)) {
-                                    CountDownResendOTP(timer = 30, modifier = Modifier.imePadding())
+                                    CountDownResendOTP(timer = 30, modifier = Modifier.imePadding(),viewModel)
                                 }
                                 Spacer(
                                     modifier = Modifier

@@ -28,12 +28,12 @@ fun EditButton(boolean: Boolean,click: () -> Unit) {
         shape = RoundedCornerShape(15.dp),
         elevation = ButtonDefaults.elevation(0.dp)
     ) {
-//        Icon(
-//            painter = painterResource(id = icons),
-//            contentDescription = null,
-//            modifier = Modifier
-//                .size(15.dp)
-//        )
+        Icon(
+            painter = painterResource(id = R.drawable.logout),
+            contentDescription = null,
+            modifier = Modifier
+                .size(15.dp)
+        )
         Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = "Keluar",

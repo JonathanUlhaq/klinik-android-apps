@@ -1,6 +1,8 @@
 package com.example.aplikasiklinik.view.registantrian
 
+import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -20,12 +22,14 @@ import androidx.navigation.NavController
 import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.components.*
 import com.example.aplikasiklinik.utils.networkChecker
+import com.example.aplikasiklinik.view.navigation.Routes
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RegistAntrian(
-    navController: NavController
+    navController: NavController,
+    vm:RegisAntriViewModel
 ) {
     val dropDown = remember {
         mutableStateOf(false)
@@ -34,7 +38,9 @@ fun RegistAntrian(
     val keluhan = remember {
         mutableStateOf("")
     }
-
+    val isLoading = remember {
+        mutableStateOf(false)
+    }
     val alergi = remember {
         mutableStateOf("")
     }
@@ -42,10 +48,14 @@ fun RegistAntrian(
     val focusKeluhan = remember {
         FocusRequester()
     }
+    val poli = remember {
+        mutableStateOf("")
+    }
 
     val focusAlergi = remember {
         FocusRequester()
     }
+    LoadingScreen(boolean = isLoading.value)
 
     val state = rememberScrollState()
     val context = LocalContext.current
@@ -67,14 +77,20 @@ fun RegistAntrian(
             }
         }
 
+    val isError = remember {
+        mutableStateOf(false)
+    }
+
+    val isEmpty = remember {
+        mutableStateOf(false)
+    }
+
 
 
 
 
     val iconDrop by animateIntAsState(targetValue = if (dropDown.value) R.drawable.arrow_down else R.drawable.arrow_right)
-    val poli = remember {
-        mutableStateOf("Pilih Poli")
-    }
+
 
     ModalBottomSheetLayout(sheetContent = {
         BottomConnectionWarning(
@@ -154,6 +170,23 @@ fun RegistAntrian(
                                 ) {
 
                                 }
+                                Spacer(modifier = Modifier.height(4.dp))
+                                AnimatedVisibility(visible = isError.value) {
+                                    Text(
+                                        "* Anda sudah mengantri",
+                                        fontSize = 10.sp,
+                                        color = Color.Black.copy(0.8f),
+                                        style = MaterialTheme.typography.caption
+                                    )
+                                }
+                                AnimatedVisibility(visible = isEmpty.value) {
+                                    Text(
+                                        "* Mohon isi semua form",
+                                        fontSize = 10.sp,
+                                        color = Color.Black.copy(0.8f),
+                                        style = MaterialTheme.typography.caption
+                                    )
+                                }
                             }
                         }
 
@@ -170,7 +203,19 @@ fun RegistAntrian(
                                 modifier = Modifier
                                     .fillMaxWidth()
                             ) {
-
+                                if (keluhan.value.isNotEmpty() &&
+                                        alergi.value.isNotEmpty() &&
+                                        poli.value.isNotEmpty()) {
+                                    vm.daftarAntrian(context,isEmpty,isError,boolean = isLoading,alergi = alergi.value, keluhan = keluhan.value, poli = poli.value) {
+                                        it.let { res ->
+                                            navController.navigate(Routes.CurrentAntrian.route) {
+                                                popUpTo(0)
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    isEmpty.value  = true
+                                }
                             }
                         }
                     }

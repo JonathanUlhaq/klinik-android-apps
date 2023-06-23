@@ -5,8 +5,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.example.aplikasiklinik.model.LoginSaver
 import com.example.aplikasiklinik.model.ThemeModeModel
 import kotlinx.coroutines.flow.Flow
+import retrofit2.http.POST
 
 @Dao
 interface DatabaseDAO {
@@ -21,5 +23,14 @@ interface DatabaseDAO {
 
     @Query("DELETE FROM theme_tb")
     suspend fun deleteAll()
+
+    @Query("SELECT * FROM LoginSaver")
+    fun getUserInfo():Flow<List<LoginSaver>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUserInfo(model:LoginSaver)
+
+    @Query("DELETE FROM LoginSaver")
+    suspend fun logoutApp()
 
 }

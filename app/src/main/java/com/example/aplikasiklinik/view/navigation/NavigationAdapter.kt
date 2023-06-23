@@ -13,7 +13,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.aplikasiklinik.view.antrian.AntrianScreen
+import com.example.aplikasiklinik.view.antrian.AntrianViewModel
+import com.example.aplikasiklinik.view.currentantrian.CurrenAntrViewModel
 import com.example.aplikasiklinik.view.jadwal.JadwalScreen
+import com.example.aplikasiklinik.view.login.LoginViewModel
 import com.example.aplikasiklinik.view.main.MainScreen
 import com.example.aplikasiklinik.view.mainfitur.MainFitur
 import com.example.aplikasiklinik.view.profil.ProfilScreen
@@ -24,19 +27,21 @@ import com.google.accompanist.navigation.animation.composable
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun NavigationAdapter(
-    dark:Boolean,
-    antrian:Int,
-    route:String = Routes.HomeAntrian.route,
-    navController:NavHostController,
-    defaultBottom:(Boolean) -> Unit,
+    dark: Boolean,
+    antrian: Int,
+    route: String = Routes.HomeAntrian.route,
+    navController: NavHostController,
+    defaultBottom: (Boolean) -> Unit,
     uri: Uri,
-    click:() -> Unit
+    click: () -> Unit
 ) {
 
 //    val regViewModel = hiltViewModel<RegisterViewModel>()
-//    val loginViewModel = hiltViewModel<LoginViewModel>()
+    val loginViewModel = hiltViewModel<LoginViewModel>()
 //    val optViewModel = hiltViewModel<OTPViewModel>()
     val profileViewModel = hiltViewModel<ProfilViewModel>()
+    val currentNavVm = hiltViewModel<CurrenAntrViewModel>()
+    val antrianVm = hiltViewModel<AntrianViewModel>()
 
     val login = remember {
         mutableStateOf(false)
@@ -51,72 +56,97 @@ fun NavigationAdapter(
     }
 
 
-    AnimatedNavHost(navController = navController, startDestination = route ) {
+    AnimatedNavHost(navController = navController, startDestination = route) {
 
         composable(Routes.HomeAntrian.route,
-            enterTransition = {
-                slideIntoContainer(towards = if (enter.value) AnimatedContentScope.SlideDirection.Right  else AnimatedContentScope.SlideDirection.Left ,tween(300))
-            },
-            exitTransition = {
-                slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else if (entering.value) AnimatedContentScope.SlideDirection.Right else AnimatedContentScope.SlideDirection.Left,tween(300))
-            }) {
+//            enterTransition = {
+//                slideIntoContainer(
+//                    towards = if (enter.value) AnimatedContentScope.SlideDirection.Right else AnimatedContentScope.SlideDirection.Left,
+//                    tween(300)
+//                )
+//            },
+//            exitTransition = {
+//                slideOutOfContainer(
+//                    towards = if (login.value) AnimatedContentScope.SlideDirection.Up else if (entering.value) AnimatedContentScope.SlideDirection.Right else AnimatedContentScope.SlideDirection.Left,
+//                    tween(300)
+//                )
+//            }
+        ) {
             defaultBottom.invoke(true)
             AntrianScreen(
                 dark,
                 antrian,
-                navController
+                currentNavVm,
+                navController,
+                antrianVm
             ) {
                 click.invoke()
             }
         }
 
         composable(Routes.ScheduleAntrian.route,
-            enterTransition = {
-                slideIntoContainer(towards =  AnimatedContentScope.SlideDirection.Right,tween(300))
-            },
-            exitTransition = {
-
-                enter.value = true
-                slideOutOfContainer(towards = AnimatedContentScope.SlideDirection.Right,tween(300))
-            }) {
-            JadwalScreen(navController = navController,dark = dark)
+//            enterTransition = {
+//                slideIntoContainer(towards = AnimatedContentScope.SlideDirection.Right, tween(300))
+//            },
+//            exitTransition = {
+//
+//                enter.value = true
+//                slideOutOfContainer(towards = AnimatedContentScope.SlideDirection.Right, tween(300))
+//            }
+        ) {
+            JadwalScreen(navController = navController, dark = dark)
         }
 
         composable(Routes.Profile.route,
-            enterTransition = {
-                slideIntoContainer(towards =   AnimatedContentScope.SlideDirection.Right ,tween(300))
-            },
-            exitTransition = {
-                slideOutOfContainer(towards =  AnimatedContentScope.SlideDirection.Right,tween(300))
-            }) {
+//            enterTransition = {
+//                slideIntoContainer(towards = AnimatedContentScope.SlideDirection.Right, tween(300))
+//            },
+//            exitTransition = {
+//                slideOutOfContainer(towards = AnimatedContentScope.SlideDirection.Right, tween(300))
+//            }
+        ) {
             defaultBottom.invoke(true)
-            ProfilScreen(navController = navController,dark = dark, viewModel = profileViewModel)
+            ProfilScreen(
+                navController = navController,
+                dark = dark,
+                viewModel = profileViewModel,
+                loginVm = loginViewModel
+            )
         }
 
-        composable(Routes.FiturRoute.route+"/{route}",
-            enterTransition = {
-                fadeIn(tween(700))
-            },
-            arguments = listOf(navArgument("route") {
-                NavType.StringType
-            })
+        composable(
+            Routes.FiturRoute.route + "/{route}",
+//            enterTransition = {
+//                fadeIn(tween(700))
+//            },
+//            arguments = listOf(navArgument("route") {
+//                NavType.StringType
+//            }
+//            )
         ) {
             defaultBottom.invoke(false)
-            MainFitur(it.arguments?.getString("route")!!,dark = dark, click = {
+            MainFitur(it.arguments?.getString("route")!!, dark = dark, click = {
                 click.invoke()
             }, antrian = antrian, uri = uri)
         }
 
-        composable(Routes.MainNavigation.route+"/{route}",
-            enterTransition = {
-                fadeIn(tween(700))
-            },
-            arguments = listOf(navArgument("route") {
-                NavType.StringType
-            })
+        composable(
+            Routes.MainNavigation.route + "/{route}",
+//            enterTransition = {
+//                fadeIn(tween(700))
+//            },
+//            arguments = listOf(navArgument("route") {
+//                NavType.StringType
+//            })
         ) {
             defaultBottom.invoke(false)
-            MainScreen(dark = dark, antrian = antrian, startDest = it.arguments?.getString("route")!!, cameraClick = {}, uri = uri  ) {}
+            MainScreen(
+                dark = dark,
+                antrian = antrian,
+                startDest = it.arguments?.getString("route")!!,
+                cameraClick = {},
+                uri = uri
+            ) {}
         }
 
     }

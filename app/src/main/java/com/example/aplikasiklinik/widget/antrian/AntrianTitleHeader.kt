@@ -20,6 +20,7 @@ import com.example.aplikasiklinik.R
 @Composable
 fun AntrianTitleHeader(
     dark: Boolean,
+    name:String,
     click: () -> Unit
 ) {
     Row(
@@ -32,7 +33,7 @@ fun AntrianTitleHeader(
                 color = MaterialTheme.colors.onSurface
             )
             Text(
-                text = "Ragnar",
+                text = name,
                 style = MaterialTheme.typography.body2,
                 color = MaterialTheme.colors.onSurface,
                 fontSize = 20.sp

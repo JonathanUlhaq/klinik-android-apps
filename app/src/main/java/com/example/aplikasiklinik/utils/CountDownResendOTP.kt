@@ -1,5 +1,6 @@
 package com.example.aplikasiklinik.utils
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -19,10 +20,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.example.aplikasiklinik.R
+import com.example.aplikasiklinik.view.otp.OTPViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun CountDownResendOTP(timer:Int,modifier: Modifier = Modifier) {
+fun CountDownResendOTP(timer:Int,modifier: Modifier = Modifier,vm:OTPViewModel) {
     val countTime = remember { mutableStateOf(timer) }
     LaunchedEffect(key1 = Unit, block = {
         while (countTime.value > 0) {
@@ -39,7 +41,13 @@ fun CountDownResendOTP(timer:Int,modifier: Modifier = Modifier) {
                 text = "Kirim ulang",
                 style = MaterialTheme.typography.body2,
                 color = MaterialTheme.colors.background,
-                textDecoration = TextDecoration.Underline
+                textDecoration = TextDecoration.Underline,
+                modifier = Modifier
+                    .clickable {
+                        vm.getOtp(vm.getNumber()!!) {
+                            countTime.value = 30
+                        }
+                    }
             )
         } else {
             Row(

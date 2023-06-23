@@ -20,7 +20,7 @@ import com.example.aplikasiklinik.view.otp.OTPViewModel
 import com.example.aplikasiklinik.view.otp.OtpScreen
 import com.example.aplikasiklinik.view.register.RegisterScreen
 import com.example.aplikasiklinik.view.splashscreen.SplashScreen
-import com.example.aplikasiklinik.widget.register.RegisterViewModel
+import com.example.aplikasiklinik.view.register.RegisterViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 
@@ -41,7 +41,7 @@ fun MainNavigation(
 
     val regViewModel = hiltViewModel<RegisterViewModel>()
     val loginViewModel = hiltViewModel<LoginViewModel>()
-//    val optViewModel = hiltViewModel<OTPViewModel>()
+  val optViewModel = hiltViewModel<OTPViewModel>()
     val mainVm = hiltViewModel<MainActivityViewModel>()
 
     val login = remember {
@@ -54,22 +54,24 @@ fun MainNavigation(
 
     AnimatedNavHost(navController = navMain, startDestination = startDest ) {
         composable(Routes.Splash.route,
-            enterTransition = {
-                fadeIn(tween(300))
-            },
-            exitTransition = {
-                slideOutOfContainer(towards = AnimatedContentScope.SlideDirection.Left,tween(300))
-            }) {
-            SplashScreen(navMain)
+//            enterTransition = {
+//                fadeIn(tween(300))
+//            },
+//            exitTransition = {
+//                slideOutOfContainer(towards = AnimatedContentScope.SlideDirection.Left,tween(300))
+//            }
+        ) {
+            SplashScreen(navMain,loginViewModel)
         }
 
         composable(Routes.Onboarding.route,
-            enterTransition = {
-                slideIntoContainer(towards = AnimatedContentScope.SlideDirection.Left,tween(300))
-            },
-            exitTransition = {
-                slideOutOfContainer(towards = if (boardingExit.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Down,tween(300))
-            }) {
+//            enterTransition = {
+//                slideIntoContainer(towards = AnimatedContentScope.SlideDirection.Left,tween(300))
+//            },
+//            exitTransition = {
+//                slideOutOfContainer(towards = if (boardingExit.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Down,tween(300))
+//            }
+        ) {
             OnBoardingScreen(navMain,mainVm,dark) {
                 login.value = it
                 boardingExit.value = it
@@ -77,45 +79,49 @@ fun MainNavigation(
         }
 
         composable(Routes.Register.route,
-            enterTransition = {
-                slideIntoContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Left,tween(300))
-            },
-            exitTransition = {
-                slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Down else AnimatedContentScope.SlideDirection.Right,tween(300))
-            }) {
-            RegisterScreen(navMain,regViewModel,mainVm,dark, cameraClick = {cameraClick.invoke()}, uri = uri, contentCamera = contentCamera, openCam = openCam) {
+//            enterTransition = {
+//                slideIntoContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Left,tween(300))
+//            },
+//            exitTransition = {
+//                slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Down else AnimatedContentScope.SlideDirection.Right,tween(300))
+//            }
+        ) {
+            RegisterScreen(navMain,regViewModel,mainVm,loginViewModel,dark, cameraClick = {cameraClick.invoke()}, uri = uri, contentCamera = contentCamera, openCam = openCam) {
                 login.value = it
             }
         }
 
 
         composable(Routes.Login.route,
-            enterTransition = {
-                slideIntoContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Down else if (!boardingExit.value) AnimatedContentScope.SlideDirection.Down else AnimatedContentScope.SlideDirection.Right,tween(300))
-            },
-            exitTransition = {
-                slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Left,tween(300))
-            }) {
+//            enterTransition = {
+//                slideIntoContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Down else if (!boardingExit.value) AnimatedContentScope.SlideDirection.Down else AnimatedContentScope.SlideDirection.Right,tween(300))
+//            },
+//            exitTransition = {
+//                slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Left,tween(300))
+//            }
+        ) {
             LoginScreen(navController = navMain,dark,loginViewModel)
         }
 
         composable(Routes.Otp.route,
-            enterTransition = {
-                slideIntoContainer(towards =  AnimatedContentScope.SlideDirection.Left ,tween(300))
-            },
-            exitTransition = {
-                slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Left,tween(300))
-            }) {
-            OtpScreen(dark,navMain,mainVm,OTPViewModel())
+//            enterTransition = {
+//                slideIntoContainer(towards =  AnimatedContentScope.SlideDirection.Left ,tween(300))
+//            },
+//            exitTransition = {
+//                slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Left,tween(300))
+//            }
+        ) {
+            OtpScreen(dark,navMain,mainVm,optViewModel)
         }
 
         composable(Routes.Home.route,
-            enterTransition = {
-                slideIntoContainer(towards =  AnimatedContentScope.SlideDirection.Left ,tween(300))
-            },
-            exitTransition = {
-                slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Left,tween(300))
-            }) {
+//            enterTransition = {
+//                slideIntoContainer(towards =  AnimatedContentScope.SlideDirection.Left ,tween(300))
+//            },
+//            exitTransition = {
+//                slideOutOfContainer(towards = if (login.value) AnimatedContentScope.SlideDirection.Up else AnimatedContentScope.SlideDirection.Left,tween(300))
+//            }
+        ) {
            HomeMenu(dark = dark,antrian, uri = uri ) {
                click.invoke()
            }

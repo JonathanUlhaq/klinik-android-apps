@@ -1,5 +1,6 @@
 package com.example.aplikasiklinik.widget.antrian
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -11,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -20,7 +22,11 @@ import com.example.aplikasiklinik.view.navigation.Routes
 
 @Composable
 fun AntrianListMenu(
-    navController: NavController) {
+    navController: NavController,
+    boolean: Boolean) {
+
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .padding(14.dp)
@@ -60,7 +66,11 @@ fun AntrianListMenu(
             color = MaterialTheme.colors.primaryVariant,
             icon = R.drawable.current_queue_icon
         ) {
-            navController.navigate(Routes.FiturRoute.route+"/"+Routes.CurrentAntrian.route)
+            if (boolean) {
+                navController.navigate(Routes.FiturRoute.route+"/"+Routes.CurrentAntrian.route)
+            } else {
+                Toast.makeText(context,"Daftar antrian terlebih dahulu untuk mendaftar fitur antrian sekarang",Toast.LENGTH_LONG).show()
+            }
         }
         Spacer(modifier = Modifier.height(16.dp))
         Divider(

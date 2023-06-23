@@ -1,5 +1,6 @@
 package com.example.aplikasiklinik.view.currentantrian
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
@@ -20,23 +21,59 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.aplikasiklinik.R
-import com.example.aplikasiklinik.components.BottomConnectionWarning
-import com.example.aplikasiklinik.components.ButtonClick
-import com.example.aplikasiklinik.components.CustomTopBar
-import com.example.aplikasiklinik.components.FiturHeader
+import com.example.aplikasiklinik.components.*
+import com.example.aplikasiklinik.utils.TokenManager
 import com.example.aplikasiklinik.utils.networkChecker
+import com.example.aplikasiklinik.view.login.LoginViewModel
+import com.example.aplikasiklinik.view.navigation.Routes
+import com.example.aplikasiklinik.widget.currentantri.ShimeringCurrentAntri
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CurrentAntrian(
-    navController: NavController
+    navController: NavController,
+    vm:CurrenAntrViewModel,
+    loginVm:LoginViewModel
 ) {
-    val state = rememberScrollState()
+
+    loginVm.getLoginStatus()
+    val loginState = loginVm.uiState.collectAsState().value
+
+    val isLoadingBatal = remember {
+        mutableStateOf(false)
+    }
+
+    val isErrorBatal = remember {
+        mutableStateOf(false)
+    }
+
+    val confirmDialog = remember {
+        mutableStateOf(false)
+    }
     val context = LocalContext.current
+
+    ConfirmDialog(title = "Apakah kamu yakin untuk membatalkan antrian ?", icon = R.drawable.warning,
+        boolean = confirmDialog , cancel = { confirmDialog.value = false }) {
+        confirmDialog.value = false
+        vm.batalAntrian(
+            isLoadingBatal,
+            isErrorBatal
+        ) {
+            Toast.makeText(context,"Berhasil membatalkan antrian",Toast.LENGTH_LONG).show()
+            navController.navigate(Routes.Home.route+"/${Routes.HomeAntrian.route}") {
+                popUpTo(0)
+            }
+        }
+    }
+
+    val state = rememberScrollState()
+    Log.d("TOKENNYA: ",TokenManager(context).getToken()!!)
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden,
         confirmStateChange = { false })
     val coroutineScope = rememberCoroutineScope()
+
     val networkConnection = remember {
         mutableStateOf(networkChecker(context))
     }
@@ -49,6 +86,17 @@ fun CurrentAntrian(
             sheetState.hide()
         }
     }
+
+    val isLoading = remember {
+        mutableStateOf(true)
+    }
+
+    val isError = remember {
+        mutableStateOf(false)
+    }
+
+    vm.getCurrentAntri(isLoading,isError)
+    val uiState = vm.uiState.collectAsState().value
 
     ModalBottomSheetLayout(sheetContent = {
         BottomConnectionWarning(
@@ -90,181 +138,168 @@ fun CurrentAntrian(
             ) {
                 Column {
                     FiturHeader()
-                    Surface(
-                        color = MaterialTheme.colors.onBackground,
-                        shape = RoundedCornerShape(20.dp),
-                        modifier = Modifier
-                            .padding(start = 14.dp, end = 14.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentWidth(CenterHorizontally)
-                                .padding(14.dp)
-                        ) {
-                            Text(
-                                text = stringResource(R.string.pasien_status),
-                                style = MaterialTheme.typography.h1,
-                                fontSize = 16.sp,
-                                color = MaterialTheme.colors.primaryVariant
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(14.dp))
-                    Surface(
-                        color = MaterialTheme.colors.onBackground,
-                        shape = RoundedCornerShape(20.dp),
-                        modifier = Modifier
-                            .padding(start = 14.dp, end = 14.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(14.dp)
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.name_icon),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colors.primaryVariant,
-                                    modifier = Modifier
-                                        .size(16.dp)
-                                )
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Text(
-                                    text = stringResource(R.string.pasien_name),
-                                    style = MaterialTheme.typography.body1,
-                                    color = MaterialTheme.colors.primaryVariant
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(20.dp))
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.bpjs_icon),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colors.primaryVariant,
-                                    modifier = Modifier
-                                        .size(16.dp)
-                                )
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Text(
-                                    text = "3351232132",
-                                    style = MaterialTheme.typography.body1,
-                                    color = MaterialTheme.colors.primaryVariant
-                                )
-                            }
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(14.dp))
-                    Surface(
-                        color = MaterialTheme.colors.onBackground,
-                        shape = RoundedCornerShape(20.dp),
-                        modifier = Modifier
-                            .padding(start = 14.dp, end = 14.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentWidth(CenterHorizontally)
-                                .padding(14.dp),
-                            horizontalAlignment = CenterHorizontally
-                        ) {
-                            Text(
-                                text = stringResource(R.string.pasien_status),
-                                style = MaterialTheme.typography.h1,
-                                fontSize = 14.sp,
-                                color = MaterialTheme.colors.primaryVariant
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
+                  if (uiState.kurang_antrian != null) {
+                      Surface(
+                          color = MaterialTheme.colors.onBackground,
+                          shape = RoundedCornerShape(20.dp),
+                          modifier = Modifier
+                              .padding(start = 14.dp, end = 14.dp)
+                      ) {
+                          Column {
+                              Row(
+                                  verticalAlignment = Alignment.CenterVertically,
+                                  modifier = Modifier
+                                      .fillMaxWidth()
+                                      .padding(
+                                          start = 14.dp,
+                                          end = 14.dp,
+                                          top = 14.dp,
+                                          bottom = 14.dp
+                                      )
+                              ) {
+                                  Icon(
+                                      painter = painterResource(id = R.drawable.profile_menu_icon),
+                                      contentDescription = null,
+                                      tint = MaterialTheme.colors.primaryVariant,
+                                      modifier = Modifier
+                                          .size(16.dp)
+                                  )
+                                  Spacer(modifier = Modifier.width(12.dp))
+                                  Text(
+                                      text = loginState.first().name,
+                                      style = MaterialTheme.typography.body1,
+                                      color = MaterialTheme.colors.primaryVariant
+                                  )
+                              }
+                          }
 
-                            Surface(
-                                shape = CircleShape,
-                                border = BorderStroke(6.dp, MaterialTheme.colors.primaryVariant),
-                                color = MaterialTheme.colors.onBackground
-                            ) {
-                                Text(
-                                    text = "10",
-                                    style = MaterialTheme.typography.h1,
-                                    color = MaterialTheme.colors.surface,
-                                    fontSize = 48.sp,
-                                    modifier = Modifier
-                                        .padding(14.dp)
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                text = stringResource(R.string.dummy_antrian_count),
-                                style = MaterialTheme.typography.body1,
-                                color = MaterialTheme.colors.primaryVariant
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(14.dp))
-                    Surface(
-                        color = MaterialTheme.colors.onBackground,
-                        shape = RoundedCornerShape(20.dp),
-                        modifier = Modifier
-                            .padding(start = 14.dp, end = 14.dp)
-                    ) {
-                        Column {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 14.dp, end = 14.dp, top = 14.dp)
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.date_icon_svg),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colors.primaryVariant,
-                                    modifier = Modifier
-                                        .size(16.dp)
-                                )
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Text(
-                                    text = "06/6/666",
-                                    style = MaterialTheme.typography.body1,
-                                    color = MaterialTheme.colors.primaryVariant
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(20.dp))
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 14.dp, end = 14.dp, bottom = 14.dp)
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.status_icon),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colors.primaryVariant,
-                                    modifier = Modifier
-                                        .size(16.dp)
-                                )
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Text(
-                                    text = stringResource(R.string.dummy_service_status),
-                                    style = MaterialTheme.typography.body1,
-                                    color = MaterialTheme.colors.primaryVariant
-                                )
-                            }
-                        }
+                      }
+                      Spacer(modifier = Modifier.height(14.dp))
+                      Surface(
+                          color = MaterialTheme.colors.onBackground,
+                          shape = RoundedCornerShape(20.dp),
+                          modifier = Modifier
+                              .padding(start = 14.dp, end = 14.dp)
+                      ) {
+                          Box(
+                              modifier = Modifier
+                                  .fillMaxWidth()
+                                  .wrapContentWidth(CenterHorizontally)
+                                  .padding(14.dp)
+                          ) {
+                              Text(
+                                  text = if (uiState.no_bpjs != null) stringResource(R.string.pasien_status) else "Pasien Umum",
+                                  style = MaterialTheme.typography.h1,
+                                  fontSize = 16.sp,
+                                  color = MaterialTheme.colors.primaryVariant
+                              )
+                          }
+                      }
+                      Spacer(modifier = Modifier.height(14.dp))
+                      Surface(
+                          color = MaterialTheme.colors.onBackground,
+                          shape = RoundedCornerShape(20.dp),
+                          modifier = Modifier
+                              .padding(start = 14.dp, end = 14.dp)
+                      ) {
+                          Column(
+                              modifier = Modifier
+                                  .fillMaxWidth()
+                                  .wrapContentWidth(CenterHorizontally)
+                                  .padding(14.dp),
+                              horizontalAlignment = CenterHorizontally
+                          ) {
+                              Surface(
+                                  color = Color.Transparent
+                              ) {
+                                  Text(
+                                      text = uiState.nomer_antrian!!.toString(),
+                                      style = MaterialTheme.typography.h1,
+                                      color = MaterialTheme.colors.surface,
+                                      fontSize = 48.sp,
+                                  )
+                              }
+                              Spacer(modifier = Modifier.height(4.dp))
+                              Box(modifier = Modifier.padding(start = 20.dp, end = 20.dp)) {
+                                  Divider(
+                                      color = Color.Black.copy(0.2f),
+                                      modifier = Modifier
+                                          .width(20.dp)
+                                  )
+                              }
+                              Spacer(modifier = Modifier.height(16.dp))
+                              Text(
+                                  text = if (uiState.kurang_antrian!! > 1) "Kurang ${uiState.kurang_antrian} antrian" else "Yuk segera persiapan, giliran kamu !",
+                                  style = MaterialTheme.typography.body1,
+                                  color = MaterialTheme.colors.primaryVariant
+                              )
+                          }
+                      }
+                      Spacer(modifier = Modifier.height(14.dp))
+                      Surface(
+                          color = MaterialTheme.colors.onBackground,
+                          shape = RoundedCornerShape(20.dp),
+                          modifier = Modifier
+                              .padding(start = 14.dp, end = 14.dp)
+                      ) {
+                          Column {
+                              Row(
+                                  verticalAlignment = Alignment.CenterVertically,
+                                  modifier = Modifier
+                                      .fillMaxWidth()
+                                      .padding(start = 14.dp, end = 14.dp, top = 14.dp)
+                              ) {
+                                  Icon(
+                                      painter = painterResource(id = R.drawable.clock_icon),
+                                      contentDescription = null,
+                                      tint = MaterialTheme.colors.primaryVariant,
+                                      modifier = Modifier
+                                          .size(16.dp)
+                                  )
+                                  Spacer(modifier = Modifier.width(12.dp))
+                                  Text(
+                                      text = uiState.data?.jam_antri!!,
+                                      style = MaterialTheme.typography.body1,
+                                      color = MaterialTheme.colors.primaryVariant
+                                  )
+                              }
+                              Spacer(modifier = Modifier.height(20.dp))
+                              Row(
+                                  verticalAlignment = Alignment.CenterVertically,
+                                  modifier = Modifier
+                                      .fillMaxWidth()
+                                      .padding(start = 14.dp, end = 14.dp, bottom = 14.dp)
+                              ) {
+                                  Icon(
+                                      painter = painterResource(id = R.drawable.status_icon),
+                                      contentDescription = null,
+                                      tint = MaterialTheme.colors.primaryVariant,
+                                      modifier = Modifier
+                                          .size(16.dp)
+                                  )
+                                  Spacer(modifier = Modifier.width(12.dp))
+                                  Text(
+                                      text = uiState.data?.status!!,
+                                      style = MaterialTheme.typography.body1,
+                                      color = MaterialTheme.colors.primaryVariant
+                                  )
+                              }
+                          }
 
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Box(modifier = Modifier
-                        .padding(start = 14.dp, end = 14.dp)) {
-                        ButtonClick(color = MaterialTheme.colors.error,
-                            text = stringResource(R.string.batal_antri),
-                            modifier = Modifier
-                                .fillMaxWidth()) {
-
-                        }
-                    }
+                      }
+                      Spacer(modifier = Modifier.height(20.dp))
+                      Box(modifier = Modifier
+                          .padding(start = 14.dp, end = 14.dp)) {
+                          ButtonClick(color = MaterialTheme.colors.error,
+                              text = stringResource(R.string.batal_antri),
+                              modifier = Modifier
+                                  .fillMaxWidth()) {
+                            confirmDialog.value = true
+                          }
+                      }
+                  } else {
+                      ShimeringCurrentAntri()
+                  }
                 }
             }
         }

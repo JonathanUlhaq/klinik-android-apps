@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "99674011345",
+    "project_id": "notiftry-ebbbd",
+    "storage_bucket": "notiftry-ebbbd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99674011345:android:842f99c03c88ac26ecf7f0",
+        "android_client_info": {
+          "package_name": "app.triyolaaccess"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "99674011345-n6huijov7k7c9af7cjvqi36038v54j9m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANfllsv1PWJZQgdvJrS1srGDaL1RF7cQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "99674011345-n6huijov7k7c9af7cjvqi36038v54j9m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99674011345:android:a35949a10ed153f7ecf7f0",
+        "android_client_info": {
+          "package_name": "com.example.notifetry"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "99674011345-n6huijov7k7c9af7cjvqi36038v54j9m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANfllsv1PWJZQgdvJrS1srGDaL1RF7cQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "99674011345-n6huijov7k7c9af7cjvqi36038v54j9m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

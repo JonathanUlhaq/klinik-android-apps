@@ -13,12 +13,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.aplikasiklinik.R
+import com.example.aplikasiklinik.model.kunjungan.DataKunjungan
 import com.example.aplikasiklinik.widget.jadwal.FontContent
 
 @Composable
 fun AntrianHistoryContent(
     dropDown:Boolean,
     index:Int,
+    item:DataKunjungan,
     onClick:(Int) -> Unit
 ) {
 
@@ -42,7 +44,7 @@ fun AntrianHistoryContent(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "01/01/2023",
+                    text = item.tanggal_kunjungan!!,
                     style = MaterialTheme.typography.h2
                 )
                 IconButton(onClick = { onClick.invoke(index) }) {
@@ -59,17 +61,17 @@ fun AntrianHistoryContent(
                     Spacer(modifier = Modifier.height(12.dp))
                     FontContent(
                         title = stringResource(R.string.poli),
-                        desc = stringResource(R.string.umum),
+                        desc = item.jenis_poli!!,
                         size = 16,
                         color = MaterialTheme.colors.primaryVariant
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    FontContent(
-                        title = stringResource(R.string.status),
-                        desc = stringResource(R.string.status_result_dummy),
-                        size = 16,
-                        color = MaterialTheme.colors.primaryVariant
-                    )
+//                    Spacer(modifier = Modifier.height(12.dp))
+//                    FontContent(
+//                        title = stringResource(R.string.status),
+//                        desc = stringResource(R.string.status_result_dummy),
+//                        size = 16,
+//                        color = MaterialTheme.colors.primaryVariant
+//                    )
                 }
             }
         }

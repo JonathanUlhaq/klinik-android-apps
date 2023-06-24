@@ -12,6 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.aplikasiklinik.view.antrianhistory.AntrianHistory
+import com.example.aplikasiklinik.view.antrianhistory.RiwayatAnViewModel
 import com.example.aplikasiklinik.view.currentantrian.CurrenAntrViewModel
 import com.example.aplikasiklinik.view.currentantrian.CurrentAntrian
 import com.example.aplikasiklinik.view.home.HomeMenu
@@ -36,6 +37,8 @@ fun ContentNavigation(
     val regisVm = hiltViewModel<RegisAntriViewModel>()
     val curVm = hiltViewModel<CurrenAntrViewModel>()
     val loginVm = hiltViewModel<LoginViewModel>()
+    val riwayatVm = hiltViewModel<RiwayatAnViewModel>()
+
     AnimatedNavHost(navController = navController, startDestination = route) {
 
         composable(
@@ -52,7 +55,7 @@ fun ContentNavigation(
 //                fadeIn(tween(700))
 //            }
         ) {
-            AntrianHistory(navController)
+            AntrianHistory(navController,riwayatVm)
         }
 
         composable(Routes.AntrianRegister.route,

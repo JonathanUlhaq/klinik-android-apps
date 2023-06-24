@@ -43,7 +43,9 @@ class ForegroundService:Service() {
         val constraint = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
-        val worker = OneTimeWorkRequestBuilder<NotificationWorker>()
+        val worker = PeriodicWorkRequestBuilder<NotificationWorker>(
+            repeatInterval = 60,TimeUnit.SECONDS
+        )
             .setConstraints(constraint)
             .build()
 
@@ -58,7 +60,9 @@ class ForegroundService:Service() {
         val constraint = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
-        val worker = OneTimeWorkRequestBuilder<NotificationWorker>()
+        val worker = PeriodicWorkRequestBuilder<NotificationWorker>(
+            repeatInterval = 60,TimeUnit.SECONDS
+        )
             .setConstraints(constraint)
             .build()
 

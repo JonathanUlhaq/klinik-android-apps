@@ -41,6 +41,8 @@ import com.example.aplikasiklinik.utils.*
 import com.example.aplikasiklinik.view.currentantrian.CurrenAntrViewModel
 import com.example.aplikasiklinik.view.main.MainScreen
 import com.example.aplikasiklinik.view.mainactivity.MainActivityViewModel
+import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.text.SimpleDateFormat
@@ -56,24 +58,11 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var output: File
     private lateinit var cameraExecutor: ExecutorService
-    private lateinit var foreground:ForegroundService
-    private var isTimerServiceBound: Boolean = false
-
     private var shouldShowCamera = mutableStateOf(false)
     private val permission = mutableStateOf(false)
     private var shouldShowPhoto = mutableStateOf(false)
-    lateinit var notif: NotificationManager
     var photoUri: Uri = Uri.EMPTY
-    private val timerServiceConnection = object : ServiceConnection {
-        override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
-            foreground = (p1 as ForegroundService.TimerBinder).service
-            isTimerServiceBound = true
-        }
 
-        override fun onServiceDisconnected(p0: ComponentName?) {
-            isTimerServiceBound = false
-        }
-    }
 
     @Inject
     lateinit var tokenManager: TokenManager
@@ -89,17 +78,20 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        FirebaseApp.initializeApp(this)
 
-        val intente = Intent(this, ForegroundService::class.java)
-        this.startService(intente)
-        bindService(
-            intente,
-            timerServiceConnection,
-            Context.BIND_AUTO_CREATE
-        )
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+                task ->
+            if (!task.isSuccessful) {
+                Log.w("FirebaseMessaging", "Gagal mendapatkan token.", task.exception)
+                return@addOnCompleteListener
+            }
+            val token = task.result
+            Log.e("TOKENNYA ",token)
+        }
+
         setContent {
             val viewModel = hiltViewModel<MainActivityViewModel>()
             val state = viewModel.uiState.collectAsState().value
@@ -193,12 +185,6 @@ class MainActivity : ComponentActivity() {
             view.updatePadding(bottom = bottom)
             insets
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-//        val intente = Intent(this, ForegroundService::class.java)
-//        this.startService(intente)
     }
 
     private fun requestCameraPermission() {

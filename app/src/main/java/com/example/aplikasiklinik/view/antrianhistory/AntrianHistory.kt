@@ -22,6 +22,8 @@ import com.example.aplikasiklinik.components.SearchField
 import com.example.aplikasiklinik.utils.networkChecker
 import com.example.aplikasiklinik.widget.antrianhistory.AntrianHistoryContent
 import com.example.aplikasiklinik.widget.antrianhistory.AntrianHistoryShimering
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -31,7 +33,7 @@ fun AntrianHistory(
     vm: RiwayatAnViewModel
 ) {
     val uiState = vm.uiState.collectAsState().value
-
+    val isRefresh by vm.isRefreshing.collectAsState()
     val dropDown = remember {
         mutableStateOf(false)
     }
@@ -39,6 +41,7 @@ fun AntrianHistory(
     val currentIndex = remember {
         mutableStateOf<Int?>(null)
     }
+
 
 //    val search = remember {
 //        mutableStateOf("")
@@ -60,98 +63,98 @@ fun AntrianHistory(
             sheetState.hide()
         }
     }
+    SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = isRefresh),
+        onRefresh = { vm.refresh() }) {
+        ModalBottomSheetLayout(
+            sheetContent = {
+                BottomConnectionWarning(
+                    context = context,
+                    iconClick = {
+                        coroutineScope.launch {
+                            networkConnection.value = networkChecker(context)
+                            if (!networkConnection.value) {
+                                Toast.makeText(
+                                    context,
+                                    "Tidak ada koneksi internet",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
 
-    ModalBottomSheetLayout(
-        sheetContent = {
-            BottomConnectionWarning(
-                context = context,
-                iconClick = {
+                    }) {
                     coroutineScope.launch {
                         networkConnection.value = networkChecker(context)
                         if (!networkConnection.value) {
-                            Toast.makeText(
-                                context,
-                                "Tidak ada koneksi internet",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(context, "Tidak ada koneksi internet", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
 
-                }) {
-                coroutineScope.launch {
-                    networkConnection.value = networkChecker(context)
-                    if (!networkConnection.value) {
-                        Toast.makeText(context, "Tidak ada koneksi internet", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+
                 }
-
-
-            }
-        },
-        sheetState = sheetState,
-        sheetBackgroundColor = Color.Transparent,
-        scrimColor = Color.Black.copy(0.8F),
-        sheetElevation = 0.dp
-    ) {
-        Scaffold(
-            backgroundColor = MaterialTheme.colors.background,
-            topBar = {
-                CustomTopBar(navController, stringResource(id = R.string.title_queue_history))
-            }
+            },
+            sheetState = sheetState,
+            sheetBackgroundColor = Color.Transparent,
+            scrimColor = Color.Black.copy(0.8F),
+            sheetElevation = 0.dp
         ) {
-            Surface(
-                modifier = Modifier
-                    .padding(it),
-                color = Color.Transparent
+            Scaffold(
+                backgroundColor = MaterialTheme.colors.background,
+                topBar = {
+                    CustomTopBar(navController, stringResource(id = R.string.title_queue_history))
+                }
             ) {
-                if (uiState.data != null) {
-                    Column {
-                        FiturHeader()
+                Surface(
+                    modifier = Modifier
+                        .padding(it),
+                    color = Color.Transparent
+                ) {
+                    if (uiState.data != null) {
+                        Column {
+                            FiturHeader()
 //                       Box(
 //                           modifier = Modifier
 //                               .padding(start = 14.dp, end = 14.dp, bottom = 8.dp)
 //                       ) {
 //
 //                       }
-                        Spacer(modifier = Modifier.height(14.dp))
-                        if (uiState.data.isNotEmpty()) {
-                            LazyColumn(content = {
-                                itemsIndexed(uiState.data) { index, item ->
-                                    dropDown.value = index == currentIndex.value
-                                    AntrianHistoryContent(
-                                        dropDown.value,
-                                        index,
-                                        item
-                                    ) { currentIndexed ->
-                                        if (currentIndex.value == index) {
-                                            currentIndex.value = null
-                                        } else {
-                                            currentIndex.value = currentIndexed
+                            Spacer(modifier = Modifier.height(14.dp))
+                            if (uiState.data.isNotEmpty()) {
+                                LazyColumn(content = {
+                                    itemsIndexed(uiState.data) { index, item ->
+                                        dropDown.value = index == currentIndex.value
+                                        AntrianHistoryContent(
+                                            dropDown.value,
+                                            index,
+                                            item
+                                        ) { currentIndexed ->
+                                            if (currentIndex.value == index) {
+                                                currentIndex.value = null
+                                            } else {
+                                                currentIndex.value = currentIndexed
+                                            }
                                         }
                                     }
+                                })
+                            } else {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .wrapContentSize(Alignment.Center)
+                                ) {
+                                    Text(text = "Anda belum memiliki riwayat kunjungan",
+                                        style = MaterialTheme.typography.h2,
+                                        color = MaterialTheme.colors.surface)
                                 }
-                            })
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .wrapContentSize(Alignment.Center)
-                            ) {
-                                Text(text = "Anda belum memiliki riwayat kunjungan",
-                                    style = MaterialTheme.typography.h2,
-                                    color = MaterialTheme.colors.surface)
                             }
                         }
+                    } else {
+                        AntrianHistoryShimering()
                     }
-                } else {
-                    AntrianHistoryShimering()
                 }
             }
         }
     }
-
-
 }
 
 

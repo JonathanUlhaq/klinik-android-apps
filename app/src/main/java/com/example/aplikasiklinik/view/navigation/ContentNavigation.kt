@@ -18,6 +18,7 @@ import com.example.aplikasiklinik.view.currentantrian.CurrentAntrian
 import com.example.aplikasiklinik.view.home.HomeMenu
 import com.example.aplikasiklinik.view.login.LoginViewModel
 import com.example.aplikasiklinik.view.profil.DetailProfile
+import com.example.aplikasiklinik.view.profil.ProfilViewModel
 import com.example.aplikasiklinik.view.registantrian.RegisAntriViewModel
 import com.example.aplikasiklinik.view.registantrian.RegistAntrian
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -38,6 +39,7 @@ fun ContentNavigation(
     val curVm = hiltViewModel<CurrenAntrViewModel>()
     val loginVm = hiltViewModel<LoginViewModel>()
     val riwayatVm = hiltViewModel<RiwayatAnViewModel>()
+    val profileVm = hiltViewModel<ProfilViewModel>()
 
     AnimatedNavHost(navController = navController, startDestination = route) {
 
@@ -93,7 +95,7 @@ fun ContentNavigation(
 //                fadeIn(tween(700))
 //            }
         ) {
-            DetailProfile(navController)
+            DetailProfile(navController,profileVm)
         }
 
 

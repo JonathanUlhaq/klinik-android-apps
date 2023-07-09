@@ -40,6 +40,7 @@ fun RegisForm(
     phone: MutableState<String>,
     isError:MutableState<Boolean>,
     detectFirst:MutableState<Boolean>,
+    stillBlank:MutableState<Boolean>,
     click:() -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -85,7 +86,7 @@ fun RegisForm(
 
     val nikFocus = remember { mutableStateOf(false) }
 
-    nikValidator.value = nik.value.length < 16
+    nikValidator.value = nik.value.length < 14
 
     Column {
 
@@ -281,7 +282,7 @@ fun RegisForm(
         }
     }
         Spacer(modifier = Modifier.height(2.dp))
-        AnimatedVisibility(visible = isError.value) {
+        AnimatedVisibility(visible = stillBlank.value || isError.value) {
             Text(
                 "* Cek dan lengkapi semua form isian",
                 fontSize = 12.sp,

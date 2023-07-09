@@ -38,3 +38,34 @@ fun DisableInput() {
             .width(60.dp)
     )
 }
+
+@Composable
+fun DisableInputOutlined() {
+    OutlinedTextField(value = "",
+        onValueChange = {  },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            textColor = MaterialTheme.colors.surface,
+            backgroundColor = Color.Transparent,
+            disabledBorderColor = MaterialTheme.colors.primaryVariant.copy(0.7F),
+            unfocusedBorderColor = MaterialTheme.colors.primaryVariant.copy(0.8F),
+            focusedBorderColor = MaterialTheme.colors.primaryVariant,
+            unfocusedLabelColor = MaterialTheme.colors.primaryVariant.copy(0.8F),
+            focusedLabelColor = MaterialTheme.colors.primaryVariant,
+            leadingIconColor = MaterialTheme.colors.primaryVariant,
+            disabledLeadingIconColor = MaterialTheme.colors.primaryVariant.copy(0.7F),
+            disabledTextColor = MaterialTheme.colors.surface.copy(0.7F)
+        ),
+        label = {
+            Text(
+                text = "+62",
+                style = MaterialTheme.typography.h1,
+                fontSize = 12.sp,
+                color = MaterialTheme.colors.primary
+            )
+        },
+        shape = RoundedCornerShape(12.dp),
+        enabled = false,
+        modifier = Modifier
+            .width(60.dp)
+    )
+}

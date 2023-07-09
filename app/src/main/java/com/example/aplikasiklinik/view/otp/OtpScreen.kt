@@ -198,7 +198,7 @@ fun OtpScreen(
                                                                 tanggal_lahir = user.tanggal_lahir!!
                                                             )
                                                         )
-                                                        viewModel.addToken(token!!)
+
                                                         navController.navigate(Routes.Home.route) {
                                                             popUpTo(0)
                                                         }

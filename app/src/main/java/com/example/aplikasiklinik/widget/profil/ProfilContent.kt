@@ -26,11 +26,19 @@ fun ProfilContent(
     icon: Int,
     desc: MutableState<String>,
     boolean: Boolean,
-    keyboard: KeyboardType
-) {
+    keyboard: KeyboardType,
+    isNik:Boolean = false
+    ) {
     val keyboardOption = LocalSoftwareKeyboardController.current
     OutlinedTextField(value = desc.value,
-        onValueChange = { desc.value = it },
+        onValueChange = { if (isNik) {
+            if (desc.value.length <14) {
+                desc.value = it
+            }
+        } else {
+            desc.value = it
+        }
+        },
         colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = MaterialTheme.colors.surface,
             backgroundColor = Color.Transparent,
@@ -48,7 +56,7 @@ fun ProfilContent(
                 painter = painterResource(id = icon),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(16.dp)
+                    .size(14.dp)
             )
         },
         enabled = boolean,

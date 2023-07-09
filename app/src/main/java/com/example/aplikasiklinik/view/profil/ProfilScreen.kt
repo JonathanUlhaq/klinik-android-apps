@@ -21,12 +21,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+//import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.example.aplikasiklinik.R
-import com.example.aplikasiklinik.components.ButtonClick
-import com.example.aplikasiklinik.components.ConfirmDialog
-import com.example.aplikasiklinik.components.DatePicker
-import com.example.aplikasiklinik.components.EditButton
+import com.example.aplikasiklinik.components.*
 import com.example.aplikasiklinik.view.login.LoginViewModel
 import com.example.aplikasiklinik.view.navigation.Routes
 import com.example.aplikasiklinik.widget.profil.ProfilContent
@@ -143,8 +141,13 @@ fun ProfilScreen(
                                        .padding(10.dp)
                                        .size(120.dp)
                                ) {
+//                                   AsyncImage(model = viewModel.pref.getFoto(),
+//                                       contentDescription = null,
+//                                       modifier = Modifier
+//                                           .size(120.dp),
+//                                       contentScale = ContentScale.Crop )
                                    Image(
-                                       painter = painterResource(id = R.drawable.foto_dummy),
+                                       painter = rememberImagePainter(viewModel.pref.getFoto()),
                                        contentDescription = null,
                                        modifier = Modifier
                                            .size(120.dp),
@@ -175,9 +178,9 @@ fun ProfilScreen(
                            }
                        }
 
-                       if (uiState.first().no_bpjs.isNotEmpty()) {
+                       if (!viewModel.pref.getBpjs().isNullOrEmpty()) {
                            Spacer(modifier = Modifier.height(20.dp))
-                           viewModel.nik.value = uiState.first().no_bpjs
+                           viewModel.nik.value = viewModel.pref.getBpjs()!!
                            ProfilContent(
                                R.drawable.nik_icon, viewModel.nik, viewModel.edit.value,
                                KeyboardType.NumberPassword
@@ -185,14 +188,14 @@ fun ProfilScreen(
                        }
 
                        Spacer(modifier = Modifier.height(20.dp))
-                       viewModel.name.value = uiState.first().name
+                       viewModel.name.value = viewModel.pref.getNama()!!
                        ProfilContent(
                            R.drawable.name_icon, viewModel.name, viewModel.edit.value,
                            KeyboardType.Text
                        )
 
                        Spacer(modifier = Modifier.height(20.dp))
-                       viewModel.date.value = uiState.first().tanggal_lahir
+                       viewModel.date.value = viewModel.pref.getLahir()!!
                        DatePicker(
                            context = current,
                            date = viewModel.date,
@@ -202,18 +205,25 @@ fun ProfilScreen(
                        )
 
                        Spacer(modifier = Modifier.height(20.dp))
-                       viewModel.address.value = uiState.first().alamat
+                       viewModel.address.value = viewModel.pref.getAlamat()!!
                        ProfilContent(
                            R.drawable.location_icon, viewModel.address, viewModel.edit.value,
                            KeyboardType.Text
                        )
 
                        Spacer(modifier = Modifier.height(20.dp))
-                       viewModel.phone.value = uiState.first().telepon
-                       ProfilContent(
-                           R.drawable.phone_icon, viewModel.phone, viewModel.edit.value,
-                           KeyboardType.Phone
-                       )
+                       viewModel.phone.value = viewModel.pref.getTelepon()!!
+                       Row(
+                           verticalAlignment = Alignment.CenterVertically
+                       ) {
+
+                           DisableInputOutlined()
+                           Spacer(modifier = Modifier.width(8.dp))
+                           ProfilContent(
+                               R.drawable.phone_icon, viewModel.phone, viewModel.edit.value,
+                               KeyboardType.Phone
+                           )
+                       }
                        Spacer(modifier = Modifier.height(20.dp))
                        ButtonClick(color = MaterialTheme.colors.primary, text = "Ubah", modifier = Modifier.fillMaxWidth() ) {
                            navController.navigate(Routes.FiturRoute.route+"/"+Routes.DetailProfile.route)

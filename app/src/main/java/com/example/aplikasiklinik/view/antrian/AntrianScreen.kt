@@ -18,6 +18,8 @@ import com.example.aplikasiklinik.view.currentantrian.CurrenAntrViewModel
 import com.example.aplikasiklinik.widget.antrian.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.*
 
@@ -31,6 +33,8 @@ fun AntrianScreen(
     antrianVm:AntrianViewModel,
     click: () -> Unit
 ) {
+
+    val isRefresh by antrianVm.isRefreshing.collectAsState()
 
 //    Nanti dihapus
     val antrian = remember {
@@ -110,72 +114,78 @@ fun AntrianScreen(
         }
     }
 
-    Scaffold(
-        backgroundColor = MaterialTheme.colors.background
-    ) {
-        Surface(
-            color = Color.Transparent,
-            modifier = Modifier
-                .padding(it)
+    SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = isRefresh),
+        onRefresh = { antrianVm.refresh() }) {
+        Scaffold(
+            backgroundColor = MaterialTheme.colors.background
         ) {
-            if (profileState.name != null) {
-                Column {
-                    Box {
+            Surface(
+                color = Color.Transparent,
+                modifier = Modifier
+                    .padding(it)
+                    .verticalScroll(scrollState, enabled = true)
+            ) {
+                if (profileState.name != null) {
+                    Column {
+                        Box {
 
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
-                                .height(170.dp)
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colors.onPrimary)
-                        )
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 14.dp, end = 14.dp, top = 14.dp)
-                        ) {
-                            AntrianTitleHeader(
-                                dark,
-                                profileState.name!!
-                            ) {
-                                click.invoke()
-                            }
-                            Spacer(
+                            Box(
                                 modifier = Modifier
-                                    .height(20.dp)
+                                    .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
+                                    .height(170.dp)
+                                    .fillMaxWidth()
+                                    .background(MaterialTheme.colors.onPrimary)
                             )
-                            WidgetInformation(uiState)
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Surface(
-                        modifier = Modifier
-                            .padding(start = 14.dp, end = 14.dp)
-                            .verticalScroll(scrollState, enabled = true)
-                        ,
-                        color = Color.Transparent
-                    ) {
-                        Column {
-                            WidgetAnnouncement(state)
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Surface(
+                            Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(bottom = 14.dp),
-                                color = MaterialTheme.colors.onBackground,
-                                shape = RoundedCornerShape(20.dp)
+                                    .padding(start = 14.dp, end = 14.dp, top = 14.dp)
                             ) {
-                                AntrianListMenu(navController,isNotEmpty.value )
+                                AntrianTitleHeader(
+                                    dark,
+                                    profileState.name!!
+                                ) {
+                                    click.invoke()
+                                }
+                                Spacer(
+                                    modifier = Modifier
+                                        .height(20.dp)
+                                )
+                                WidgetInformation(uiState)
                             }
                         }
-                    }
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Surface(
+                            modifier = Modifier
+                                .padding(start = 14.dp, end = 14.dp)
 
+                            ,
+                            color = Color.Transparent
+                        ) {
+                            Column {
+                                WidgetAnnouncement(state)
+                                Spacer(modifier = Modifier.height(10.dp))
+                                Surface(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = 14.dp),
+                                    color = MaterialTheme.colors.onBackground,
+                                    shape = RoundedCornerShape(20.dp)
+                                ) {
+                                    AntrianListMenu(navController,isNotEmpty.value )
+                                }
+                            }
+                        }
+
+                    }
+                } else {
+                    ShimeringAntrian()
                 }
-            } else {
-            ShimeringAntrian()
             }
         }
     }
+
+
 }
 
 

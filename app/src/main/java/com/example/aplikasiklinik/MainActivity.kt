@@ -27,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -92,6 +93,10 @@ class MainActivity : ComponentActivity() {
             Log.e("TOKENNYA ",token)
         }
 
+        val intene = Intent(this,ForegroundService::class.java)
+        this.startService(intene)
+
+
         setContent {
             val viewModel = hiltViewModel<MainActivityViewModel>()
             val state = viewModel.uiState.collectAsState().value
@@ -144,6 +149,7 @@ class MainActivity : ComponentActivity() {
                 darkTheme = if (state.isEmpty()) boolean else state.first().darkMode
             ) {
                 // A surface container using the 'background' color from the theme
+                val context = LocalContext.current
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -170,6 +176,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             }) {
+                            context.startService(intene)
 //                            viewModel.insertBoolean(if (state.isEmpty()) ThemeModeModel(0,
 //                                !boolean ) else ThemeModeModel(0, !state.first().darkMode))
                         }
@@ -204,6 +211,17 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        val intene = Intent(this,ForegroundService::class.java)
+        this.startService(intene)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val intene = Intent(this,ForegroundService::class.java)
+        this.startService(intene)
+    }
     private fun handleImageCapture(uri: Uri) {
         shouldShowCamera.value = false
         photoUri = uri

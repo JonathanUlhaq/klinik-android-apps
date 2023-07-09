@@ -15,6 +15,12 @@ class SharePrefrence @Inject constructor(@ApplicationContext context: Context) {
         editor.apply()
     }
 
+    fun saveId(id: String) {
+        val editor = prefs.edit()
+        editor.putString("USER_ID", id)
+        editor.apply()
+    }
+
     fun saveNama(nama: String) {
         val editor = prefs.edit()
         editor.putString("USER_NAMA", nama)
@@ -24,6 +30,12 @@ class SharePrefrence @Inject constructor(@ApplicationContext context: Context) {
     fun saveAlamat(alamat: String) {
         val editor = prefs.edit()
         editor.putString("USER_ALAMAT", alamat)
+        editor.apply()
+    }
+
+    fun saveFoto(urlFoto:String) {
+        val editor = prefs.edit()
+        editor.putString("USER_FOTO",urlFoto)
         editor.apply()
     }
 
@@ -60,8 +72,15 @@ class SharePrefrence @Inject constructor(@ApplicationContext context: Context) {
     fun getNama(): String? {
         return prefs.getString("USER_NAMA", null)
     }
+    fun getId(): String? {
+        return prefs.getString("USER_ID", null)
+    }
 
     fun getNumber(): String? {
         return prefs.getString("USER_NUMBER", null)
+    }
+
+    fun getFoto():String? {
+        return prefs.getString("USER_FOTO",null)
     }
 }

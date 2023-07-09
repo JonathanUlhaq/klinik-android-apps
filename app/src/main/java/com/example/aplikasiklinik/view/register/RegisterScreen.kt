@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.aplikasiklinik.R
 import com.example.aplikasiklinik.components.*
+import com.example.aplikasiklinik.utils.ConstUrl
 import com.example.aplikasiklinik.utils.LaunchCamera
 import com.example.aplikasiklinik.view.login.LoginViewModel
 import com.example.aplikasiklinik.view.mainactivity.MainActivityViewModel
@@ -40,7 +41,15 @@ import com.example.aplikasiklinik.view.navigation.Routes
 import com.example.aplikasiklinik.widget.register.RegisForm
 import com.example.aplikasiklinik.view.register.RegisterViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.default
+import id.zelory.compressor.constraint.destination
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -98,6 +107,10 @@ fun RegisterScreen(
 
     val capturedImagebyUri = remember {
         mutableStateOf(Uri.EMPTY)
+    }
+
+    val stillBlank = remember {
+        mutableStateOf(false)
     }
     val showPermission = remember {
         mutableStateOf(false)
@@ -211,7 +224,8 @@ fun RegisterScreen(
                                             address,
                                             phone,
                                             isError,
-                                            detectFirst
+                                            detectFirst,
+                                            stillBlank
                                         ) {
                                             login.invoke(true)
                                             navController.navigate(Routes.Login.route)
@@ -219,20 +233,67 @@ fun RegisterScreen(
                                         Spacer(modifier = Modifier.height(8.dp))
                                         VerificationButton {
                                             login.invoke(false)
-                                            if (!detectFirst.value) {
-                                                viewModel.registerAkun(
-                                                    nama = name.value,
-                                                    telepon = phone.value,
-                                                    alamat = address.value,
-                                                    tanggal_lahir = date.value,
-                                                    isError = isError,
-                                                    password = "12345678",
-                                                    no_bpjs = nik.value,
-                                                    isLoading = isLoading
-                                                ){
-                                                    loginVm.getOtp(otp =phone.value){}
-                                                    navController.navigate(Routes.Otp.route)
+                                            if (
+                                                !detectFirst.value &&
+                                                        name.value.isNotEmpty() &&
+                                                        !capturedImagebyUri.value.path.isNullOrEmpty() &&
+                                                        date.value.isNotEmpty() &&
+                                                        address.value.isNotEmpty()
+                                            ) {
+                                                runBlocking {
+                                                    val file = File(capturedImagebyUri.value.path!!)
+                                                    val compresspr = Compressor.compress(context, file) {
+                                                        default()
+                                                        destination(file)
+                                                    }
+                                                    val requestBody = compresspr.asRequestBody("image/*".toMediaType())
+                                                    val gambar = MultipartBody.Part.createFormData(
+                                                        "foto",
+                                                        compresspr.name,
+                                                        requestBody
+                                                    )
+
+
+                                                    val tanggalLahir =
+                                                        RequestBody.create("text/plain".toMediaType(), date.value)
+                                                    val alamatRequest = RequestBody.create(
+                                                        "text/plain".toMediaType(),
+                                                        address.value
+                                                    )
+                                                    val noBpjs =
+                                                        RequestBody.create("text/plain".toMediaType(), nik.value)
+                                                    val nameRequest =
+                                                        RequestBody.create("text/plain".toMediaType(), name.value)
+                                                    val phoneRequest =
+                                                        RequestBody.create("text/plain".toMediaType(), phone.value)
+                                                    val passwordRequest =
+                                                        RequestBody.create("text/plain".toMediaType(), "12345678")
+
+                                                    viewModel.registerAkun(
+                                                        foto = gambar,
+                                                        nama = nameRequest,
+                                                        telepon = phoneRequest,
+                                                        alamat = alamatRequest,
+                                                        tanggal_lahir = tanggalLahir,
+                                                        isError = isError,
+                                                        password = passwordRequest,
+                                                        no_bpjs = noBpjs,
+                                                        isLoading = isLoading
+                                                    ){ response ->
+                                                        viewModel.pref.saveAlamat(address.value)
+                                                        viewModel.pref.saveFoto(ConstUrl.BASE_URL + response.user?.foto!!)
+                                                        viewModel.pref.saveBPJS(nik.value)
+                                                        viewModel.pref.saveLahir(date.value)
+                                                        viewModel.pref.saveNama(name.value)
+                                                        viewModel.pref.saveTelepon(phone.value)
+                                                        loginVm.getOtp(otp =phone.value){}
+                                                        navController.navigate(Routes.Otp.route)
+                                                    }
                                                 }
+
+
+                                            } else {
+                                                stillBlank.value = true
                                             }
                                         }
 

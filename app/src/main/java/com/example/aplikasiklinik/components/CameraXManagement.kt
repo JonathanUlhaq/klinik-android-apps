@@ -145,7 +145,7 @@ private fun takePhoto(
 ) {
     val photoFile = File(
         outputDirectory,
-        SimpleDateFormat(fileName, Locale.TAIWAN).format(System.currentTimeMillis()) + ".png"
+        SimpleDateFormat(fileName, Locale.TAIWAN).format(System.currentTimeMillis()) + ".jpg"
     )
 
     val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
@@ -180,7 +180,8 @@ private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
 @Composable
 fun requestCameraPermission(
     context: Context,
-    openCamera: MutableState<Boolean>
+    openCamera: MutableState<Boolean>,
+    changeContent:MutableState<Boolean> = mutableStateOf(false)
 ) {
     val coroutine = rememberCoroutineScope()
     val permission = rememberLauncherForActivityResult(
@@ -190,6 +191,7 @@ fun requestCameraPermission(
                 Toast.makeText(context, "Akses kamera diizinkan", Toast.LENGTH_SHORT).show()
                 coroutine.launch {
                     openCamera.value = true
+                    changeContent.value = true
                 }
             } else {
                 Toast.makeText(context, "Akses kamera tidak diizinkan", Toast.LENGTH_SHORT).show()
@@ -202,6 +204,7 @@ fun requestCameraPermission(
         Toast.makeText(context, "Akses kamera diizinkan", Toast.LENGTH_SHORT).show()
         SideEffect {
             openCamera.value = true
+            changeContent.value = true
         }
     } else {
         Toast.makeText(context, "Akses kamera tidak diizinkan", Toast.LENGTH_SHORT).show()

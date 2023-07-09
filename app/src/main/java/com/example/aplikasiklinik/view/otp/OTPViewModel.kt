@@ -9,6 +9,7 @@ import com.example.aplikasiklinik.model.LoginSaver
 import com.example.aplikasiklinik.model.pasien.PasienResponse
 import com.example.aplikasiklinik.model.pasien.User
 import com.example.aplikasiklinik.repositories.pasienLogin.PasLogRepo
+import com.example.aplikasiklinik.utils.ConstUrl
 import com.example.aplikasiklinik.utils.SharePrefrence
 import com.example.aplikasiklinik.utils.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -52,6 +53,15 @@ class OTPViewModel @Inject constructor(val pref:SharePrefrence,val repo:PasLogRe
                 isLoading.value = true
                 repo.loginPasien(otp).let { response ->
                     resp.invoke(response.user, response.access_token)
+                    pref.saveId(response.user?.id!!.toString())
+                    pref.saveBPJS(response.user.no_bpjs.toString())
+                    pref.saveNama(response.user.name.toString())
+                    pref.saveLahir(response.user.tanggal_lahir.toString())
+                    pref.saveTelepon(response.user.telepon.toString())
+                    pref.saveAlamat(response.user.alamat.toString())
+                    pref.saveFoto("${ConstUrl.BASE_URL}${response.user.foto.toString()}")
+                    tokene.saveToken(response.access_token!!)
+                    Log.d("TOKENNYA MASSE ",tokene.getToken()!!)
                     isLoading.value = false
                 }
             } catch (e: Exception) {

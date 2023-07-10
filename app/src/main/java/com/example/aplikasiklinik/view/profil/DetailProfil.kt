@@ -58,19 +58,34 @@ import java.util.concurrent.Executors
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun DetailProfile(navController: NavController, vm: ProfilViewModel) {
+fun DetailProfile(dark:Boolean,navController: NavController, vm: ProfilViewModel) {
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(
-        color = MaterialTheme.colors.primary
-    )
+    if (dark) {
+        systemUiController.setStatusBarColor(
+            color = MaterialTheme.colors.onPrimary
+        )
+
+        systemUiController.setNavigationBarColor(
+            color = MaterialTheme.colors.onPrimary
+        )
+    } else {
+        systemUiController.setStatusBarColor(
+            color = MaterialTheme.colors.primaryVariant
+        )
+
+        systemUiController.setNavigationBarColor(
+            color = MaterialTheme.colors.background
+        )
+    }
     val scrollState = rememberScrollState()
     val nik = remember {
-        mutableStateOf(vm.sharePref().getBpjs()!!)
+        mutableStateOf(if (vm.sharePref().getBpjs()!! == "null") "" else vm.sharePref().getBpjs()!!)
     }
+
     val nikValidator = remember {
         mutableStateOf(false)
     }
-    nikValidator.value = nik.value.length < 16
+    nikValidator.value = nik.value.length < 12
     val name = remember {
         mutableStateOf(vm.sharePref().getNama()!!)
     }
@@ -78,7 +93,7 @@ fun DetailProfile(navController: NavController, vm: ProfilViewModel) {
         mutableStateOf(vm.sharePref().getAlamat()!!)
     }
     val pasienSelected = remember {
-        mutableStateOf(if(vm.sharePref().getBpjs().isNullOrEmpty()) false else true)
+        mutableStateOf(if(vm.sharePref().getBpjs().isNullOrEmpty() || vm.pref.getBpjs() == "null") false else true)
     }
     val listJenisPasien = listOf(
         "Pasien Non BPJS",
@@ -86,7 +101,7 @@ fun DetailProfile(navController: NavController, vm: ProfilViewModel) {
     )
     val currentSelected = remember {
         mutableStateOf(
-            if (vm.sharePref().getBpjs().isNullOrEmpty()) {
+            if (vm.sharePref().getBpjs().isNullOrEmpty() || vm.pref.getBpjs() == "null") {
                 0
             } else {
                 1
@@ -419,65 +434,69 @@ fun DetailProfile(navController: NavController, vm: ProfilViewModel) {
                                     }
 
                                         runBlocking {
-                                            val file = File(capturedImagebyUri.value.path!!)
-                                            val compresspr = Compressor.compress(context, file) {
-                                                default()
-                                                destination(file)
-                                            }
+                                           try {
+                                               val file = File(capturedImagebyUri.value.path!!)
+                                               val compresspr = Compressor.compress(context, file) {
+                                                   default()
+                                                   destination(file)
+                                               }
 
 
-                                            val nameRequest =
-                                                RequestBody.create("text/plain".toMediaType(), name.value)
-                                            val phoneRequest =
-                                                RequestBody.create("text/plain".toMediaType(), phone.value)
-                                            val alamatRequest = RequestBody.create(
-                                                "text/plain".toMediaType(),
-                                                address.value
-                                            )
-                                            val noBpjs =
-                                                RequestBody.create("text/plain".toMediaType(), nik.value)
-                                            val tanggalLahir =
-                                                RequestBody.create("text/plain".toMediaType(), date.value)
+                                               val nameRequest =
+                                                   RequestBody.create("text/plain".toMediaType(), name.value)
+                                               val phoneRequest =
+                                                   RequestBody.create("text/plain".toMediaType(), phone.value)
+                                               val alamatRequest = RequestBody.create(
+                                                   "text/plain".toMediaType(),
+                                                   address.value
+                                               )
+                                               val noBpjs =
+                                                   RequestBody.create("text/plain".toMediaType(), nik.value)
+                                               val tanggalLahir =
+                                                   RequestBody.create("text/plain".toMediaType(), date.value)
 
-                                            val requestBody = compresspr.asRequestBody("image/*".toMediaType())
-                                            val gambar = MultipartBody.Part.createFormData(
-                                                "foto",
-                                                compresspr.name,
-                                                requestBody
-                                            )
-                                            vm.updateProfile(
-                                                id = vm.getId()!!.toInt(),
-                                                alamat = alamatRequest,
-                                                foto = gambar,
-                                                no_bpjs = noBpjs,
-                                                tanggal_lahir = tanggalLahir,
-                                                name = nameRequest,
-                                                telepon = phoneRequest,
-                                                password = nameRequest,
-                                                isLoading = isLoading,
-                                                eventError = {
-                                                    Toast.makeText(
-                                                        context,
-                                                        "Coba lagi, server sedang sibuk",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
-                                            ) {
-                                                vm.pref.saveAlamat(address.value)
-                                                vm.pref.saveFoto(ConstUrl.BASE_URL + it.data.foto)
-                                                vm.pref.saveBPJS(nik.value)
-                                                vm.pref.saveLahir(date.value)
-                                                vm.pref.saveNama(name.value)
-                                                vm.pref.saveTelepon(phone.value)
-                                                navController.navigate(Routes.Home.route + "/" + Routes.Profile.route) {
-                                                    popUpTo(0)
-                                                }
-                                                Toast.makeText(
-                                                    context,
-                                                    "Profile berhasil diperbarui",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
+                                               val requestBody = compresspr.asRequestBody("image/*".toMediaType())
+                                               val gambar = MultipartBody.Part.createFormData(
+                                                   "foto",
+                                                   compresspr.name,
+                                                   requestBody
+                                               )
+                                               vm.updateProfile(
+                                                   id = vm.getId()!!.toInt(),
+                                                   alamat = alamatRequest,
+                                                   foto = gambar,
+                                                   no_bpjs = noBpjs,
+                                                   tanggal_lahir = tanggalLahir,
+                                                   name = nameRequest,
+                                                   telepon = phoneRequest,
+                                                   password = nameRequest,
+                                                   isLoading = isLoading,
+                                                   eventError = {
+                                                       Toast.makeText(
+                                                           context,
+                                                           "Coba lagi, server sedang sibuk",
+                                                           Toast.LENGTH_SHORT
+                                                       ).show()
+                                                   }
+                                               ) {
+                                                   vm.pref.saveAlamat(address.value)
+                                                   vm.pref.saveFoto(ConstUrl.BASE_URL + it.data.foto)
+                                                   vm.pref.saveBPJS(nik.value)
+                                                   vm.pref.saveLahir(date.value)
+                                                   vm.pref.saveNama(name.value)
+                                                   vm.pref.saveTelepon(phone.value)
+                                                   navController.navigate(Routes.Home.route + "/" + Routes.Profile.route) {
+                                                       popUpTo(0)
+                                                   }
+                                                   Toast.makeText(
+                                                       context,
+                                                       "Profile berhasil diperbarui",
+                                                       Toast.LENGTH_SHORT
+                                                   ).show()
+                                               }
+                                           } catch (e:Exception) {
+                                               Log.e("UPLOAD ERROR ",e.toString())
+                                           }
                                         }
 
                                 } else {

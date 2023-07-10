@@ -261,13 +261,15 @@ fun RegisterScreen(
                                                         address.value
                                                     )
                                                     val noBpjs =
-                                                        RequestBody.create("text/plain".toMediaType(), nik.value)
+                                                        RequestBody.create("text/plain".toMediaType(), if (nik.value.isNotEmpty())nik.value else "")
                                                     val nameRequest =
                                                         RequestBody.create("text/plain".toMediaType(), name.value)
                                                     val phoneRequest =
                                                         RequestBody.create("text/plain".toMediaType(), phone.value)
                                                     val passwordRequest =
                                                         RequestBody.create("text/plain".toMediaType(), "12345678")
+                                                    val deviceRequest =
+                                                        RequestBody.create("text/plain".toMediaType(), viewModel.pref.getDeviceId()!!)
 
                                                     viewModel.registerAkun(
                                                         foto = gambar,
@@ -278,11 +280,16 @@ fun RegisterScreen(
                                                         isError = isError,
                                                         password = passwordRequest,
                                                         no_bpjs = noBpjs,
-                                                        isLoading = isLoading
+                                                        isLoading = isLoading,
+                                                        deviceId = deviceRequest
                                                     ){ response ->
                                                         viewModel.pref.saveAlamat(address.value)
                                                         viewModel.pref.saveFoto(ConstUrl.BASE_URL + response.user?.foto!!)
-                                                        viewModel.pref.saveBPJS(nik.value)
+                                                        if (nik.value.isNotEmpty()) {
+                                                            viewModel.pref.saveBPJS(nik.value)
+                                                        } else {
+                                                            viewModel.pref.saveBPJS("")
+                                                        }
                                                         viewModel.pref.saveLahir(date.value)
                                                         viewModel.pref.saveNama(name.value)
                                                         viewModel.pref.saveTelepon(phone.value)

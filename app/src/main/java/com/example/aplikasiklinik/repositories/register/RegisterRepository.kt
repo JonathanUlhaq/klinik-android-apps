@@ -14,7 +14,8 @@ class RegisterRepository @Inject constructor(private val api: APIEndpoint) {
         tanggal_lahir: RequestBody,
         alamat: RequestBody,
         no_bpjs:RequestBody,
-        password:RequestBody
+        password:RequestBody,
+        device_id:RequestBody
     ):RegisterResponse = api.daftarAkun(
         foto,
         name,
@@ -22,6 +23,7 @@ class RegisterRepository @Inject constructor(private val api: APIEndpoint) {
         tanggal_lahir,
         alamat,
         no_bpjs,
-        password
+        password,
+        device_id
     )
 }

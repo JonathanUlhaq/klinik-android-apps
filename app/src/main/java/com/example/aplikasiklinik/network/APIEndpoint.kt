@@ -5,6 +5,7 @@ import com.example.aplikasiklinik.model.batalantri.BatalAntriResponse
 import com.example.aplikasiklinik.model.currentantrian.AntriSekarangResponse
 import com.example.aplikasiklinik.model.daftarantri.DafAntriResponse
 import com.example.aplikasiklinik.model.kunjungan.KunjugnanResponse
+import com.example.aplikasiklinik.model.login.LoginResponse
 import com.example.aplikasiklinik.model.pasien.PasienResponse
 import com.example.aplikasiklinik.model.pasien.User
 import com.example.aplikasiklinik.model.register.RegisterResponse
@@ -30,7 +31,8 @@ interface APIEndpoint {
     @FormUrlEncoded
     @POST("api/login")
     suspend fun getAllData(
-        @Field("otp") otp: String): PasienResponse
+        @Field("otp") otp: String,
+        @Field("device_id")device_id:String): PasienResponse
 
     @Multipart
     @POST("/api/profile/{id}?_method=PUT")
@@ -55,7 +57,7 @@ interface APIEndpoint {
     @POST("api/otp")
     suspend fun getOTP(
         @Field("telepon")otp:String
-    )
+    ):LoginResponse
 
     @FormUrlEncoded
     @POST("api/pasien/antrian")
@@ -74,7 +76,8 @@ interface APIEndpoint {
         @Part("tanggal_lahir")tanggal_lahir:RequestBody,
         @Part("alamat")alamat:RequestBody,
         @Part("no_bpjs")no_bpjs:RequestBody,
-        @Part("password")password:RequestBody
+        @Part("password")password:RequestBody,
+        @Part("device_id")device_id:RequestBody
     ):RegisterResponse
 
     @GET("api/pasien/antrianku")

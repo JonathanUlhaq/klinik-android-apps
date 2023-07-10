@@ -15,6 +15,12 @@ class SharePrefrence @Inject constructor(@ApplicationContext context: Context) {
         editor.apply()
     }
 
+    fun saveDeviceId(number: String) {
+        val editor = prefs.edit()
+        editor.putString("USER_DEVICE_ID", number)
+        editor.apply()
+    }
+
     fun saveId(id: String) {
         val editor = prefs.edit()
         editor.putString("USER_ID", id)
@@ -82,5 +88,9 @@ class SharePrefrence @Inject constructor(@ApplicationContext context: Context) {
 
     fun getFoto():String? {
         return prefs.getString("USER_FOTO",null)
+    }
+
+    fun getDeviceId():String? {
+        return prefs.getString("USER_DEVICE_ID",null)
     }
 }

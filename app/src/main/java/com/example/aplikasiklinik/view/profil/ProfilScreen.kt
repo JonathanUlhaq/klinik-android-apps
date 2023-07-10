@@ -178,7 +178,7 @@ fun ProfilScreen(
                            }
                        }
 
-                       if (!viewModel.pref.getBpjs().isNullOrEmpty()) {
+                       if (!viewModel.pref.getBpjs().isNullOrEmpty() && viewModel.pref.getBpjs() != "null") {
                            Spacer(modifier = Modifier.height(20.dp))
                            viewModel.nik.value = viewModel.pref.getBpjs()!!
                            ProfilContent(

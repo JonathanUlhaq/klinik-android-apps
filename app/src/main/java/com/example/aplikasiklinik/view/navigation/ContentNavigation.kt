@@ -95,7 +95,7 @@ fun ContentNavigation(
 //                fadeIn(tween(700))
 //            }
         ) {
-            DetailProfile(navController,profileVm)
+            DetailProfile(dark,navController,profileVm)
         }
 
 

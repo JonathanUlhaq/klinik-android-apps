@@ -41,8 +41,15 @@ class LoginViewModel @Inject constructor(
             try {
                 isLoading.value = true
                 repo.getOtp(otp).let {
-                    isLoading.value = false
-                     event.invoke()
+                    if (it.success == false) {
+                        isLoading.value = false
+                        isError.value = true
+                    } else {
+                        isLoading.value = false
+                        event.invoke()
+                        isError.value = false
+                    }
+
                 }
             } catch (e: Exception) {
                  isLoading.value = false

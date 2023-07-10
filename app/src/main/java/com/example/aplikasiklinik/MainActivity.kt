@@ -68,6 +68,9 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var tokenManager: TokenManager
 
+    @Inject
+    lateinit var pref:SharePrefrence
+
 
     private val requestPermissionLauncer = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -90,6 +93,8 @@ class MainActivity : ComponentActivity() {
                 return@addOnCompleteListener
             }
             val token = task.result
+            pref.saveDeviceId(token)
+            Log.e("TOKEN TERSIMPAN ",pref.getDeviceId()!!)
             Log.e("TOKENNYA ",token)
         }
 

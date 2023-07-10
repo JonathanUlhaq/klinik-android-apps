@@ -33,6 +33,7 @@ class RegisterViewModel @Inject constructor(
         alamat: RequestBody,
         no_bpjs: RequestBody,
         password: RequestBody,
+        deviceId:RequestBody,
         isLoading: MutableState<Boolean>,
         isError: MutableState<Boolean>,
         action: (RegisterResponse) -> Unit
@@ -47,7 +48,8 @@ class RegisterViewModel @Inject constructor(
                     tanggal_lahir = tanggal_lahir,
                     alamat = alamat,
                     no_bpjs = no_bpjs,
-                    password = password
+                    password = password,
+                    device_id = deviceId
                 ).let {
                     pref.saveNumber(it.user?.telepon!!)
                     token.saveToken(it.access_token!!)
